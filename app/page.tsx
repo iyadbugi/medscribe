@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import dynamic from "next/dynamic";
 import {
   FileDown,
@@ -119,6 +119,22 @@ function activeStepIndex(stage: Stage): number {
 
 export default function HomePage() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
+  const stageSectionRef = useRef<HTMLElement | null>(null);
+  const prevStageRef = useRef(state.stage);
+
+  useEffect(() => {
+    const prev = prevStageRef.current;
+    prevStageRef.current = state.stage;
+    if (prev === state.stage) return;
+    if (state.stage === "idle") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    const el = stageSectionRef.current;
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }, [state.stage]);
 
   const runPipeline = async (audio: Blob, metadata: VisitMetadata) => {
     dispatch({ type: "begin_transcribe", audio });
@@ -286,7 +302,8 @@ export default function HomePage() {
       {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD */}
       <section
         id="start"
-        className={`mx-auto w-full max-w-6xl px-5 sm:px-8 ${
+        ref={stageSectionRef}
+        className={`mx-auto w-full max-w-6xl scroll-mt-24 px-5 sm:px-8 ${
           state.stage === "idle" || state.stage === "error"
             ? "pt-20"
             : "pt-12 sm:pt-16"
