@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Mic, Square, RotateCcw, Play, Pause } from "lucide-react";
+import { Mic, Square, RotateCcw, Play, Pause, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -17,11 +17,14 @@ function formatTime(seconds: number) {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
+const BARS = 28;
+
 export function Recorder({ onComplete, disabled }: Props) {
   const [state, setState] = useState<RecorderState>("idle");
   const [elapsed, setElapsed] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [level, setLevel] = useState(0);
+  const [bars, setBars] = useState<number[]>(() => Array(BARS).fill(0.12));
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const recorderRef = useRef<MediaRecorder | null>(null);
@@ -78,7 +81,13 @@ export function Recorder({ onComplete, disabled }: Props) {
         const v = Math.abs(data[i] - 128);
         if (v > peak) peak = v;
       }
-      setLevel(Math.min(1, peak / 80));
+      const next = Math.min(1, peak / 80);
+      setLevel(next);
+      setBars((prev) => {
+        const out = prev.slice(1);
+        out.push(Math.max(0.08, next * (0.6 + Math.random() * 0.55)));
+        return out;
+      });
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -99,7 +108,9 @@ export function Recorder({ onComplete, disabled }: Props) {
         : MediaRecorder.isTypeSupported("audio/webm")
         ? "audio/webm"
         : "";
-      const recorder = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
+      const recorder = mime
+        ? new MediaRecorder(stream, { mimeType: mime })
+        : new MediaRecorder(stream);
       chunksRef.current = [];
       recorder.ondataavailable = (e) => {
         if (e.data && e.data.size > 0) chunksRef.current.push(e.data);
@@ -116,13 +127,14 @@ export function Recorder({ onComplete, disabled }: Props) {
       recorderRef.current = recorder;
       startMeter(stream);
       setElapsed(0);
+      setBars(Array(BARS).fill(0.12));
       tickRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
       setState("recording");
     } catch (err) {
       const message =
         err instanceof Error
           ? err.name === "NotAllowedError"
-            ? "Microphone access was denied. Please allow it in your browser settings and try again."
+            ? "Microphone access was denied. Allow it in your browser settings and try again."
             : err.message
           : "Could not start the microphone.";
       setError(message);
@@ -161,6 +173,7 @@ export function Recorder({ onComplete, disabled }: Props) {
     }
     finalBlobRef.current = null;
     setElapsed(0);
+    setBars(Array(BARS).fill(0.12));
     setState("idle");
   };
 
@@ -168,88 +181,181 @@ export function Recorder({ onComplete, disabled }: Props) {
     if (finalBlobRef.current) onComplete(finalBlobRef.current);
   };
 
+  const isLive = state === "recording" || state === "paused";
+
   return (
-    <div className="flex flex-col items-stretch gap-4">
-      <div className="flex flex-col items-center gap-3 rounded-xl border bg-card p-6">
-        <div className="font-mono text-3xl tabular-nums" aria-live="polite">
-          {formatTime(elapsed)}
+    <div className="flex flex-col gap-4">
+      <div className="relative flex flex-col items-center gap-6 rounded-[20px] bg-card/80 p-7 ring-1 ring-border/70 backdrop-blur-sm">
+        {/* Big focal mic */}
+        <div className="relative grid place-items-center">
+          {state === "recording" && (
+            <>
+              <span className="absolute inset-0 -m-2 animate-pulse-ring rounded-full bg-[color:var(--sage)]/35" />
+              <span className="absolute inset-0 -m-2 animate-pulse-ring rounded-full bg-[color:var(--sage)]/25 [animation-delay:700ms]" />
+            </>
+          )}
+          <button
+            type="button"
+            onClick={
+              state === "idle"
+                ? start
+                : state === "recording"
+                ? pause
+                : state === "paused"
+                ? resume
+                : reset
+            }
+            disabled={disabled}
+            aria-label={
+              state === "idle"
+                ? "Start recording"
+                : state === "recording"
+                ? "Pause recording"
+                : state === "paused"
+                ? "Resume recording"
+                : "Reset"
+            }
+            className={`relative grid size-24 place-items-center rounded-full transition-all duration-300 disabled:opacity-50 ${
+              state === "recording"
+                ? "bg-[color:var(--clay)] text-foreground shadow-[0_18px_40px_-18px_color-mix(in_oklch,var(--clay)_70%,transparent)]"
+                : state === "paused"
+                ? "bg-card text-foreground ring-2 ring-[color:var(--clay)]"
+                : "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] shadow-[0_18px_40px_-18px_color-mix(in_oklch,var(--sage-deep)_75%,transparent)] hover:shadow-[0_22px_44px_-18px_color-mix(in_oklch,var(--sage-deep)_85%,transparent)]"
+            }`}
+            style={
+              state === "recording"
+                ? { transform: `scale(${1 + level * 0.06})` }
+                : undefined
+            }
+          >
+            {state === "recording" ? (
+              <Pause className="size-9" strokeWidth={1.6} />
+            ) : state === "paused" ? (
+              <Play className="size-9" strokeWidth={1.6} />
+            ) : state === "stopped" ? (
+              <RotateCcw className="size-8" strokeWidth={1.6} />
+            ) : (
+              <Mic className="size-9" strokeWidth={1.6} />
+            )}
+          </button>
         </div>
 
-        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+        {/* Status label */}
+        <div className="flex flex-col items-center gap-1.5">
           <div
-            className="h-full rounded-full bg-red-500 transition-[width] duration-100"
-            style={{
-              width:
-                state === "recording"
-                  ? `${Math.round(level * 100)}%`
-                  : state === "paused"
-                  ? "10%"
-                  : "0%",
-              opacity: state === "recording" ? 1 : state === "paused" ? 0.5 : 0,
-            }}
-            aria-hidden
-          />
+            className="font-mono text-3xl tabular-nums tracking-tight text-foreground"
+            aria-live="polite"
+          >
+            {formatTime(elapsed)}
+          </div>
+          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            {state === "recording" && (
+              <>
+                <span className="size-1.5 animate-pulse rounded-full bg-[color:var(--clay)]" />
+                Recording
+              </>
+            )}
+            {state === "paused" && (
+              <>
+                <span className="size-1.5 rounded-full bg-[color:var(--clay)]" />
+                Paused
+              </>
+            )}
+            {state === "idle" && (
+              <>
+                <span className="size-1.5 rounded-full bg-[color:var(--sage)]" />
+                Ready when you are
+              </>
+            )}
+            {state === "stopped" && (
+              <>
+                <span className="size-1.5 rounded-full bg-[color:var(--sage-deep)]" />
+                Captured · review or send
+              </>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-          {state === "idle" && (
+        {/* Waveform */}
+        <div className="flex h-10 w-full max-w-sm items-center justify-center gap-[3px]">
+          {bars.map((b, i) => (
+            <span
+              key={i}
+              className={`w-[3px] rounded-full transition-all duration-150 ${
+                isLive
+                  ? state === "paused"
+                    ? "bg-[color:var(--clay)]/50"
+                    : "bg-[color:var(--sage-deep)]"
+                  : state === "stopped"
+                  ? "bg-[color:var(--sage)]/60"
+                  : "bg-border"
+              }`}
+              style={{
+                height: `${Math.max(8, b * 100)}%`,
+                opacity: isLive ? 0.65 + b * 0.35 : 0.55,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Action controls */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+          {state === "recording" && (
             <Button
-              size="lg"
-              onClick={start}
-              disabled={disabled}
-              className="gap-2"
+              variant="outline"
+              onClick={stop}
+              className="gap-2 rounded-full px-5"
             >
-              <Mic className="size-4" />
-              Start recording
+              <Square className="size-3.5" />
+              Stop
             </Button>
           )}
 
-          {state === "recording" && (
-            <>
-              <Button variant="outline" onClick={pause} className="gap-2">
-                <Pause className="size-4" />
-                Pause
-              </Button>
-              <Button variant="destructive" onClick={stop} className="gap-2">
-                <Square className="size-4" />
-                Stop
-              </Button>
-            </>
-          )}
-
           {state === "paused" && (
-            <>
-              <Button onClick={resume} className="gap-2">
-                <Play className="size-4" />
-                Resume
-              </Button>
-              <Button variant="destructive" onClick={stop} className="gap-2">
-                <Square className="size-4" />
-                Stop
-              </Button>
-            </>
+            <Button
+              variant="outline"
+              onClick={stop}
+              className="gap-2 rounded-full px-5"
+            >
+              <Square className="size-3.5" />
+              Stop
+            </Button>
           )}
 
           {state === "stopped" && (
             <>
-              <Button variant="outline" onClick={reset} className="gap-2">
-                <RotateCcw className="size-4" />
+              <Button
+                variant="outline"
+                onClick={reset}
+                className="gap-2 rounded-full px-5"
+              >
+                <RotateCcw className="size-3.5" />
                 Re-record
               </Button>
-              <Button onClick={submit} disabled={disabled} className="gap-2">
+              <button
+                type="button"
+                onClick={submit}
+                disabled={disabled}
+                className="inline-flex h-9 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-5 text-sm font-medium text-[color:var(--primary-foreground)] hover:opacity-90 transition-opacity disabled:opacity-50"
+              >
                 Generate summary
-              </Button>
+                <ArrowRight className="size-4" />
+              </button>
             </>
           )}
         </div>
 
         {state === "stopped" && audioUrl && (
-          <audio src={audioUrl} controls className="w-full pt-2" />
+          <audio
+            src={audioUrl}
+            controls
+            className="w-full max-w-md rounded-full"
+          />
         )}
       </div>
 
       {error && (
-        <div className="rounded-md border border-destructive/40 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
           {error}
         </div>
       )}
