@@ -31,6 +31,11 @@ const PDFDownloadLink = dynamic(
   { ssr: false }
 );
 
+const ExplainerPlayer = dynamic(
+  () => import("@/components/explainer-player").then((m) => m.ExplainerPlayer),
+  { ssr: false, loading: () => <div className="aspect-[3/2] w-full rounded-[28px] bg-[color:var(--cream)]" /> }
+);
+
 type Stage = "idle" | "transcribing" | "summarizing" | "review" | "error";
 
 type State = {
@@ -196,107 +201,95 @@ export default function HomePage() {
     <main className="relative flex w-full flex-1 flex-col">
       {/* HERO */}
       {(state.stage === "idle" || state.stage === "error") && (
-        <section className="mx-auto w-full max-w-6xl px-5 pt-10 sm:px-8 sm:pt-16">
-          <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
-            <div className="animate-rise">
-              <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklch,var(--sage-deep)_22%,transparent)] bg-[color-mix(in_oklch,var(--mint)_45%,var(--background))] px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]">
-                <Stethoscope className="size-3.5" strokeWidth={1.7} />
-                For clinicians, after the visit
-              </span>
-              <h1 className="mt-5 font-display text-balance text-[2.6rem] leading-[1.02] text-foreground sm:text-[4rem] md:text-[4.8rem]">
-                Walk out with the{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  note
-                </span>{" "}
-                already{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  written.
+        <>
+          <section className="w-full pt-6 sm:pt-8">
+            <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-14 xl:gap-20">
+              {/* Text column */}
+              <div className="animate-rise">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)]">
+                  <Stethoscope className="size-3.5" strokeWidth={1.8} />
+                  For clinicians · after the visit
                 </span>
-              </h1>
-              <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-                Dictate a short post-visit summary. MedScribe returns an
-                editable SOAP note and a plain-English handout, both
-                downloadable as PDF in under a minute.
-              </p>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <a
-                  href="#start"
-                  className="inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-6 text-sm font-medium text-[color:var(--primary-foreground)] shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_12px_32px_-12px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all"
-                >
-                  Start a visit
-                  <ArrowRight className="size-4" strokeWidth={1.8} />
-                </a>
-                <a
-                  href="#how"
-                  className="inline-flex h-12 items-center gap-2 rounded-full border border-border bg-card px-6 text-sm font-medium text-foreground/80 hover:bg-secondary transition-colors"
-                >
-                  How it works
-                </a>
-              </div>
-              <dl className="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-border/60 pt-6">
-                {[
-                  { k: "~40s", v: "average draft time" },
-                  { k: "2 docs", v: "SOAP + handout" },
-                  { k: "0", v: "files written to disk" },
-                ].map((s) => (
-                  <div key={s.v}>
-                    <dt className="font-display text-2xl tracking-tight text-foreground">
-                      {s.k}
-                    </dt>
-                    <dd className="mt-1 text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                      {s.v}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            {/* Hero side card — vertical pipeline preview */}
-            <aside className="animate-rise relative overflow-hidden rounded-[28px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_75%,var(--card))] to-[color-mix(in_oklch,var(--cream)_65%,var(--card))] p-7 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_18%,transparent)] [animation-delay:120ms]">
-              <div className="absolute -right-12 -top-12 size-48 rounded-full bg-[color-mix(in_oklch,var(--sage)_30%,transparent)] blur-3xl" />
-              <div className="absolute -bottom-16 -left-10 size-40 rounded-full bg-[color-mix(in_oklch,var(--clay)_22%,transparent)] blur-3xl" />
-              <div className="relative">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
-                    Workflow
+                <h1 className="mt-6 font-display text-balance text-[2.6rem] leading-[0.95] tracking-[-0.04em] text-foreground sm:text-[3.4rem] md:text-[4rem] xl:text-[4.6rem]">
+                  Walk out with the note{" "}
+                  <span className="text-[color:var(--sage-deep)]">
+                    already written.
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-card/70 px-2.5 py-1 text-[11px] text-muted-foreground ring-1 ring-border/70">
-                    <Clock className="size-3" />
-                    avg &lt;1 min
-                  </span>
+                </h1>
+                <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  Dictate a short post-visit summary. MedScribe returns an
+                  editable SOAP note and a plain-English handout, both
+                  downloadable as PDF in under a minute.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center gap-5">
+                  <a
+                    href="#start"
+                    className="inline-flex h-14 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-8 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all"
+                  >
+                    Start the demo
+                    <ArrowRight className="size-4" strokeWidth={1.8} />
+                  </a>
+                  <a
+                    href="#how"
+                    className="text-sm font-medium text-foreground/70 underline decoration-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)] decoration-2 underline-offset-[6px] hover:text-foreground hover:decoration-[color:var(--sage-deep)] transition-colors"
+                  >
+                    How it works
+                  </a>
                 </div>
-                <h3 className="mt-3 font-display text-2xl leading-tight text-foreground">
-                  From{" "}
-                  <span className="font-display-italic text-[color:var(--sage-deep)]">
-                    spoken word
-                  </span>{" "}
-                  to signed note.
-                </h3>
-
-                <ol className="relative mt-6 space-y-4 pl-7 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)]">
-                  {steps.map((s, i) => (
-                    <li key={s.key} className="relative">
-                      <span className="absolute -left-7 top-1 grid size-[22px] place-items-center rounded-full bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] ring-[3px] ring-[color-mix(in_oklch,var(--mint)_80%,transparent)]">
-                        <s.icon className="size-3" strokeWidth={2} />
-                      </span>
-                      <div className="flex items-baseline justify-between">
-                        <p className="text-sm font-medium text-foreground">
-                          {i + 1}. {s.title}
-                        </p>
-                        <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                          step
-                        </span>
-                      </div>
-                      <p className="mt-0.5 text-[13px] leading-relaxed text-muted-foreground">
-                        {s.blurb}
-                      </p>
-                    </li>
+                <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 sm:gap-8">
+                  {[
+                    { k: "~40s", v: "avg draft time" },
+                    { k: "2 docs", v: "SOAP + handout" },
+                    { k: "0", v: "files on disk" },
+                  ].map((s) => (
+                    <div key={s.v}>
+                      <dt className="font-display text-2xl tracking-[-0.03em] text-foreground sm:text-3xl">
+                        {s.k}
+                      </dt>
+                      <dd className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[11px]">
+                        {s.v}
+                      </dd>
+                    </div>
                   ))}
-                </ol>
+                </dl>
               </div>
-            </aside>
-          </div>
-        </section>
+
+              {/* Video column — edge-to-edge on the right */}
+              <a
+                href="#start"
+                className="animate-rise relative block aspect-[4/3] w-full overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] lg:mt-0"
+                aria-label="Watch the explainer and start the demo"
+              >
+                <ExplainerPlayer />
+              </a>
+            </div>
+          </section>
+
+          {/* Full-bleed steel-blue band */}
+          <section className="mt-24 w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
+            <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
+              <span className="text-[11px] uppercase tracking-[0.22em] opacity-75">
+                A quieter way
+              </span>
+              <h2 className="mt-5 font-display text-5xl leading-[1.02] tracking-[-0.04em] sm:text-6xl">
+                Notes that{" "}
+                <span className="font-display-italic">finish themselves.</span>
+              </h2>
+              <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed opacity-85 sm:text-lg">
+                Memory is sharpest the moment after a visit ends. MedScribe
+                turns that minute into a signed note and a plain-English
+                handout for the patient who just walked out.
+              </p>
+              <a
+                href="#start"
+                className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--primary-foreground)] px-7 text-sm font-medium text-[color:var(--sage-deep)] hover:opacity-90 transition-opacity"
+              >
+                Try the demo
+                <ArrowRight className="size-4" strokeWidth={1.8} />
+              </a>
+            </div>
+          </section>
+        </>
       )}
 
       {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD */}
@@ -353,11 +346,8 @@ export default function HomePage() {
               <div className="absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 01 · Visit details
               </div>
-              <h2 className="mt-2 font-display text-2xl leading-tight">
-                Who and{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  when.
-                </span>
+              <h2 className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em]">
+                Who and <span className="text-[color:var(--sage-deep)]">when.</span>
               </h2>
               <p className="mt-1.5 text-sm text-muted-foreground">
                 Optional. The model uses these to address the patient by name.
@@ -375,11 +365,8 @@ export default function HomePage() {
               <div className="absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 02 · Dictation
               </div>
-              <h2 className="mt-2 font-display text-2xl leading-tight">
-                Speak the visit.{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  Loosely.
-                </span>
+              <h2 className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em]">
+                Speak the visit. <span className="text-[color:var(--sage-deep)]">Loosely.</span>
               </h2>
               <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
                 Subjective findings, exam, assessment, plan. Don&rsquo;t worry
@@ -414,11 +401,8 @@ export default function HomePage() {
               <span className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 In progress
               </span>
-              <h2 className="mt-2 font-display text-3xl leading-tight">
-                Just a{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  moment.
-                </span>
+              <h2 className="mt-2 font-display text-3xl leading-tight tracking-[-0.03em]">
+                Just a <span className="text-[color:var(--sage-deep)]">moment.</span>
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 The audio is being processed locally and sent only to the model
@@ -515,11 +499,8 @@ export default function HomePage() {
                   <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                     04 · Review &amp; edit
                   </span>
-                  <h2 className="mt-2 font-display text-3xl leading-tight">
-                    Your draft, in{" "}
-                    <span className="font-display-italic text-[color:var(--sage-deep)]">
-                      your hands.
-                    </span>
+                  <h2 className="mt-2 font-display text-3xl leading-tight tracking-[-0.03em]">
+                    Your draft, in <span className="text-[color:var(--sage-deep)]">your hands.</span>
                   </h2>
                   <p className="mt-2 max-w-md text-sm text-muted-foreground">
                     The AI draft is editable. Changes appear in the downloaded
@@ -548,11 +529,8 @@ export default function HomePage() {
               <span className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 Export
               </span>
-              <h3 className="font-display text-2xl leading-tight">
-                Two PDFs,{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  one signature.
-                </span>
+              <h3 className="font-display text-2xl leading-tight tracking-[-0.03em]">
+                Two PDFs, <span className="text-[color:var(--sage-deep)]">one signature.</span>
               </h3>
               <p className="text-sm text-muted-foreground">
                 Hand the patient handout to your patient. Drop the SOAP note in
@@ -632,14 +610,12 @@ export default function HomePage() {
         >
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="text-[11px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
                 How it works
               </span>
-              <h2 className="mt-3 font-display text-3xl leading-tight sm:text-4xl">
-                Four steps,{" "}
-                <span className="font-display-italic text-[color:var(--sage-deep)]">
-                  finished
-                </span>{" "}
+              <h2 className="mt-3 font-display text-4xl leading-[1.02] tracking-[-0.03em] sm:text-5xl">
+                Four steps, finished
+                <br />
                 before your coffee gets cold.
               </h2>
             </div>
@@ -649,78 +625,53 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((s, i) => (
-              <article
-                key={s.key}
-                className="group relative overflow-hidden rounded-[22px] bg-card p-6 ring-1 ring-border/70 transition-all hover:-translate-y-0.5 hover:ring-[color:var(--sage-deep)]/30"
-              >
-                <div className="flex items-start justify-between">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                    0{i + 1}
-                  </span>
-                  <span className="grid size-9 place-items-center rounded-full bg-[color-mix(in_oklch,var(--mint)_60%,transparent)] text-[color:var(--sage-deep)]">
-                    <s.icon className="size-4" strokeWidth={1.8} />
-                  </span>
-                </div>
-                <h3 className="mt-6 font-display text-xl">
-                  {s.title}
-                  <span className="font-display-italic text-[color:var(--sage-deep)]">
-                    .
-                  </span>
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {s.blurb}
-                </p>
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -bottom-12 -right-12 size-32 rounded-full bg-[color:var(--mint)]/50 blur-2xl transition-opacity group-hover:opacity-100 opacity-60"
-                />
-              </article>
-            ))}
-          </div>
-
-          {/* Reassurance band */}
-          <div className="mt-14 grid gap-0 overflow-hidden rounded-[28px] bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] sm:grid-cols-3">
-            <div className="border-b border-white/10 p-8 sm:border-b-0 sm:border-r">
-              <div className="text-[11px] uppercase tracking-[0.18em] opacity-60">
-                Local capture
-              </div>
-              <h4 className="mt-3 font-display text-2xl leading-tight">
-                Audio never lands{" "}
-                <span className="font-display-italic">on our servers.</span>
-              </h4>
-              <p className="mt-3 text-sm opacity-80">
-                The browser streams the recording directly to the transcription
-                provider; we don&rsquo;t persist it.
-              </p>
-            </div>
-            <div className="border-b border-white/10 p-8 sm:border-b-0 sm:border-r">
-              <div className="text-[11px] uppercase tracking-[0.18em] opacity-60">
-                Editable everywhere
-              </div>
-              <h4 className="mt-3 font-display text-2xl leading-tight">
-                Every field is{" "}
-                <span className="font-display-italic">a draft.</span>
-              </h4>
-              <p className="mt-3 text-sm opacity-80">
-                Tweak medications, follow-up, red flags. The PDFs render exactly
-                what you see on the screen.
-              </p>
-            </div>
-            <div className="p-8">
-              <div className="text-[11px] uppercase tracking-[0.18em] opacity-60">
-                Built for clinicians
-              </div>
-              <h4 className="mt-3 font-display text-2xl leading-tight">
-                Two documents,{" "}
-                <span className="font-display-italic">two audiences.</span>
-              </h4>
-              <p className="mt-3 text-sm opacity-80">
-                The SOAP note speaks chart. The handout speaks plain English to
-                the patient who just walked out.
-              </p>
-            </div>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {steps.map((s, i) => {
+              const isMint = i % 2 === 0;
+              return (
+                <article
+                  key={s.key}
+                  className={`group relative overflow-hidden rounded-[28px] p-7 transition-all hover:-translate-y-1 ${
+                    isMint
+                      ? "bg-[color:var(--mint)]"
+                      : "bg-[color:var(--cream)] ring-1 ring-border/60"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="inline-flex items-center rounded-full bg-[color-mix(in_oklch,var(--clay)_55%,transparent)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-[color:var(--sage-deep)]">
+                      Step 0{i + 1}
+                    </span>
+                    <span
+                      className={`grid size-10 place-items-center rounded-full ${
+                        isMint
+                          ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
+                          : "bg-[color:var(--mint)] text-[color:var(--sage-deep)]"
+                      }`}
+                    >
+                      <s.icon className="size-4" strokeWidth={1.8} />
+                    </span>
+                  </div>
+                  <h3
+                    className={`mt-12 font-display text-2xl leading-tight tracking-[-0.03em] ${
+                      isMint
+                        ? "text-[color:var(--sage-deep)]"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {s.title}.
+                  </h3>
+                  <p
+                    className={`mt-2 text-sm leading-relaxed ${
+                      isMint
+                        ? "text-[color:var(--sage-deep)]/80"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {s.blurb}
+                  </p>
+                </article>
+              );
+            })}
           </div>
         </section>
       )}
