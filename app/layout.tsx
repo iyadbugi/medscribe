@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces, Bricolage_Grotesque } from "next/font/google";
 import { ShieldCheck, MicVocal, FileText, Stethoscope } from "lucide-react";
 import "./globals.css";
 
@@ -17,6 +17,12 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   axes: ["SOFT", "WONK", "opsz"],
+});
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  axes: ["opsz", "wdth"],
 });
 
 export const metadata: Metadata = {
@@ -42,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative">
         <div className="grain pointer-events-none fixed inset-0 -z-10" />
@@ -86,11 +92,11 @@ export default function RootLayout({
                 Privacy
               </a>
               <a
-                href="#"
+                href="/#start"
                 className="ml-1 inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--sage-deep)] bg-[color:var(--sage-deep)] px-4 text-[color:var(--primary-foreground)] hover:opacity-90 transition-opacity"
               >
-                <span className="size-1.5 rounded-full bg-[color:var(--mint)]" />
-                Clinician sign in
+                <span className="size-1.5 rounded-full bg-[color:var(--clay)]" />
+                Try the demo
               </a>
             </nav>
           </div>
@@ -133,8 +139,9 @@ export default function RootLayout({
               </div>
               <ul className="mt-3 space-y-2 text-sm">
                 <li>OpenAI Whisper · Structured outputs</li>
+                <li>Claude Sonnet 4.6 via Vercel AI Gateway</li>
                 <li>Next.js · Tailwind · React PDF</li>
-                <li>One opinionated clinician&rsquo;s wishlist</li>
+                <li>1st place &middot; Decoding Data Science 2026 Hackathon</li>
               </ul>
             </div>
           </div>
