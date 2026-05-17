@@ -78,7 +78,7 @@ export function PrivacyFeatures() {
   return (
     <section
       id="privacy"
-      className="relative w-full scroll-mt-10 bg-card py-12 sm:py-14 lg:flex lg:min-h-screen lg:items-center lg:py-0"
+      className="relative w-full bg-card py-16 sm:py-20"
     >
       {/* Dashed grid wash, fading in from top-right */}
       <div

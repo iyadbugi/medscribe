@@ -69,8 +69,8 @@ const Scene2Recording: React.FC<{ frame: number }> = ({ frame }) => {
         <Eyebrow opacity={fade(localFrame, 0, 12, 95, 115)}>01 · Record</Eyebrow>
         <div
           style={{
-            width: 560,
-            height: 560,
+            width: 400,
+            height: 400,
             borderRadius: "50%",
             background: COLORS.mint,
             display: "flex",
@@ -78,10 +78,10 @@ const Scene2Recording: React.FC<{ frame: number }> = ({ frame }) => {
             justifyContent: "center",
             margin: "48px auto 0",
             transform: `scale(${0.6 + enter * 0.4})`,
-            boxShadow: `0 0 0 ${28 + Math.sin(localFrame * 0.18) * 16}px ${COLORS.mint}55`,
+            boxShadow: `0 0 0 ${20 + Math.sin(localFrame * 0.18) * 12}px ${COLORS.mint}55`,
           }}
         >
-          <svg width="180" height="180" viewBox="0 0 24 24" fill="none">
+          <svg width="130" height="130" viewBox="0 0 24 24" fill="none">
             <rect x="9" y="3" width="6" height="12" rx="3" fill={COLORS.mintInk} />
             <path d="M6 11a6 6 0 0 0 12 0M12 17v4" stroke={COLORS.mintInk} strokeWidth="1.6" strokeLinecap="round" />
           </svg>

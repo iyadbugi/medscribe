@@ -11,6 +11,10 @@ const options: LenisOptions = {
   wheelMultiplier: 1,
   touchMultiplier: 1,
   syncTouch: false,
+  anchors: {
+    duration: 1.1,
+    easing: (t) => 1 - Math.pow(1 - t, 3),
+  },
 };
 
 export function SmoothScroll({ children }: { children: ReactNode }) {

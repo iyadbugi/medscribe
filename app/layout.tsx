@@ -94,7 +94,7 @@ export default function RootLayout({
                 Privacy
               </a>
               <a
-                href="/#start"
+                href="#start"
                 className="ml-1 inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--sage-deep)] bg-[color:var(--sage-deep)] px-4 text-[color:var(--primary-foreground)] hover:opacity-90 transition-opacity"
               >
                 <span className="size-1.5 rounded-full bg-[color:var(--clay)]" />

@@ -276,11 +276,10 @@ export default function HomePage() {
       )}
 
       {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD (full-bleed white band) */}
-      <section className="w-full bg-card pt-14 sm:pt-20 pb-20 sm:pb-24">
+      <section id="start" className="w-full bg-card pt-6 sm:pt-10 pb-20 sm:pb-24">
         <div
-          id="start"
           ref={stageSectionRef}
-          className="mx-auto w-full max-w-6xl scroll-mt-10 px-5 sm:px-8"
+          className="mx-auto w-full max-w-6xl px-5 sm:px-8"
         >
           <div className="mb-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
             Try it
