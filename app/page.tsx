@@ -20,6 +20,7 @@ import { VisitForm } from "@/components/visit-form";
 import { SummaryReview } from "@/components/summary-review";
 import { SoapDocument } from "@/components/pdf/soap-document";
 import { HandoutDocument } from "@/components/pdf/handout-document";
+import { PrivacyFeatures } from "@/components/privacy-features";
 import {
   emptySummary,
   type SummaryResponse,
@@ -201,107 +202,80 @@ export default function HomePage() {
     <main className="relative flex w-full flex-1 flex-col">
       {/* HERO */}
       {(state.stage === "idle" || state.stage === "error") && (
-        <>
-          <section className="w-full pt-6 sm:pt-8">
-            <div className="mx-auto grid w-full max-w-[1400px] gap-10 px-5 sm:px-8 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-14 xl:gap-20">
-              {/* Text column */}
-              <div className="animate-rise">
-                <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)]">
-                  <Stethoscope className="size-3.5" strokeWidth={1.8} />
-                  For clinicians · after the visit
-                </span>
-                <h1 className="mt-6 font-display text-balance text-[2.6rem] leading-[0.95] tracking-[-0.04em] text-foreground sm:text-[3.4rem] md:text-[4rem] xl:text-[4.6rem]">
-                  Walk out with the note{" "}
-                  <span className="text-[color:var(--sage-deep)]">
-                    already written.
-                  </span>
-                </h1>
-                <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Dictate a short post-visit summary. MedScribe returns an
-                  editable SOAP note and a plain-English handout, both
-                  downloadable as PDF in under a minute.
-                </p>
-                <div className="mt-8 flex flex-wrap items-center gap-5">
-                  <a
-                    href="#start"
-                    className="inline-flex h-14 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-8 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all"
-                  >
-                    Start the demo
-                    <ArrowRight className="size-4" strokeWidth={1.8} />
-                  </a>
-                  <a
-                    href="#how"
-                    className="text-sm font-medium text-foreground/70 underline decoration-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)] decoration-2 underline-offset-[6px] hover:text-foreground hover:decoration-[color:var(--sage-deep)] transition-colors"
-                  >
-                    How it works
-                  </a>
-                </div>
-                <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 sm:gap-8">
-                  {[
-                    { k: "~40s", v: "avg draft time" },
-                    { k: "2 docs", v: "SOAP + handout" },
-                    { k: "0", v: "files on disk" },
-                  ].map((s) => (
-                    <div key={s.v}>
-                      <dt className="font-display text-2xl tracking-[-0.03em] text-foreground sm:text-3xl">
-                        {s.k}
-                      </dt>
-                      <dd className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[11px]">
-                        {s.v}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-
-              {/* Video column — edge-to-edge on the right */}
-              <a
-                href="#start"
-                className="animate-rise relative block aspect-[4/3] w-full overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] lg:mt-0"
-                aria-label="Watch the explainer and start the demo"
-              >
-                <ExplainerPlayer />
-              </a>
-            </div>
-          </section>
-
-          {/* Full-bleed steel-blue band */}
-          <section className="mt-24 w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
-            <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
-              <span className="text-[11px] uppercase tracking-[0.22em] opacity-75">
-                A quieter way
+        <section className="w-full pt-2 sm:pt-8 pb-14 sm:pb-20">
+          <div className="mx-auto grid w-full max-w-[1400px] gap-4 px-5 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
+            {/* Text column */}
+            <div className="animate-rise order-2 min-w-0 lg:order-1">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)]">
+                <Stethoscope className="size-3.5" strokeWidth={1.8} />
+                For clinicians · after the visit
               </span>
-              <h2 className="mt-5 font-display text-5xl leading-[1.02] tracking-[-0.04em] sm:text-6xl">
-                Notes that{" "}
-                <span className="font-display-italic">finish themselves.</span>
-              </h2>
-              <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed opacity-85 sm:text-lg">
-                Memory is sharpest the moment after a visit ends. MedScribe
-                turns that minute into a signed note and a plain-English
-                handout for the patient who just walked out.
+              <h1 className="mt-6 font-display text-balance text-[2.4rem] leading-[1] tracking-[-0.04em] text-foreground sm:text-[2.9rem] md:text-[3.2rem] lg:text-[3rem] xl:text-[3.5rem]">
+                Walk out with the note{" "}
+                <span className="text-[color:var(--sage-deep)]">
+                  already written.
+                </span>
+              </h1>
+              <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+                Dictate a short post-visit summary. MedScribe returns an
+                editable SOAP note and a plain-English handout, both
+                downloadable as PDF in under a minute.
               </p>
-              <a
-                href="#start"
-                className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--primary-foreground)] px-7 text-sm font-medium text-[color:var(--sage-deep)] hover:opacity-90 transition-opacity"
-              >
-                Try the demo
-                <ArrowRight className="size-4" strokeWidth={1.8} />
-              </a>
+              <div className="mt-8 flex flex-wrap items-center gap-5">
+                <a
+                  href="#start"
+                  className="inline-flex h-14 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-8 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all"
+                >
+                  Start the demo
+                  <ArrowRight className="size-4" strokeWidth={1.8} />
+                </a>
+                <a
+                  href="#how"
+                  className="text-sm font-medium text-foreground/70 underline decoration-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)] decoration-2 underline-offset-[6px] hover:text-foreground hover:decoration-[color:var(--sage-deep)] transition-colors"
+                >
+                  How it works
+                </a>
+              </div>
+              <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 sm:gap-8">
+                {[
+                  { k: "~40s", v: "avg draft time" },
+                  { k: "2 docs", v: "SOAP + handout" },
+                  { k: "0", v: "files on disk" },
+                ].map((s) => (
+                  <div key={s.v}>
+                    <dt className="font-display text-2xl tracking-[-0.03em] text-foreground sm:text-3xl">
+                      {s.k}
+                    </dt>
+                    <dd className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[11px]">
+                      {s.v}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-          </section>
-        </>
+
+            {/* Video column — edge-to-edge on the right */}
+            <a
+              href="#start"
+              className="animate-rise relative order-1 mx-auto block aspect-[16/10] w-full min-w-0 max-w-[420px] overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] sm:max-w-none lg:order-2 lg:mt-0"
+              aria-label="Watch the explainer and start the demo"
+            >
+              <ExplainerPlayer />
+            </a>
+          </div>
+        </section>
       )}
 
-      {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD */}
-      <section
-        id="start"
-        ref={stageSectionRef}
-        className={`mx-auto w-full max-w-6xl scroll-mt-24 px-5 sm:px-8 ${
-          state.stage === "idle" || state.stage === "error"
-            ? "pt-20"
-            : "pt-12 sm:pt-16"
-        }`}
-      >
+      {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD (full-bleed white band) */}
+      <section className="w-full bg-card pt-14 sm:pt-20 pb-20 sm:pb-24">
+        <div
+          id="start"
+          ref={stageSectionRef}
+          className="mx-auto w-full max-w-6xl scroll-mt-24 px-5 sm:px-8"
+        >
+          <div className="mb-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
+            Try it
+          </div>
         {/* Stage rail (horizontal) */}
         <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
           {steps.map((s, i) => {
@@ -600,13 +574,14 @@ export default function HomePage() {
             </aside>
           </div>
         )}
+        </div>
       </section>
 
       {/* HOW IT WORKS — only on idle */}
       {(state.stage === "idle" || state.stage === "error") && (
         <section
           id="how"
-          className="mx-auto mt-24 w-full max-w-6xl px-5 sm:px-8"
+          className="mx-auto w-full max-w-6xl px-5 sm:px-8 py-20 sm:py-24"
         >
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -672,6 +647,38 @@ export default function HomePage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+      )}
+
+      {/* PRIVACY — UAE health data law posture (features-style grid) */}
+      {(state.stage === "idle" || state.stage === "error") && (
+        <PrivacyFeatures />
+      )}
+
+      {/* Full-bleed steel-blue band — closing CTA */}
+      {(state.stage === "idle" || state.stage === "error") && (
+        <section className="w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
+          <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
+            <span className="text-[11px] uppercase tracking-[0.22em] opacity-75">
+              A quieter way
+            </span>
+            <h2 className="mt-5 font-display text-5xl leading-[1.02] tracking-[-0.04em] sm:text-6xl">
+              Notes that{" "}
+              <span className="font-display-italic">finish themselves.</span>
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed opacity-85 sm:text-lg">
+              Memory is sharpest the moment after a visit ends. MedScribe
+              turns that minute into a signed note and a plain-English
+              handout for the patient who just walked out.
+            </p>
+            <a
+              href="#start"
+              className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--primary-foreground)] px-7 text-sm font-medium text-[color:var(--sage-deep)] hover:opacity-90 transition-opacity"
+            >
+              Try the demo
+              <ArrowRight className="size-4" strokeWidth={1.8} />
+            </a>
           </div>
         </section>
       )}
