@@ -203,14 +203,14 @@ export default function HomePage() {
       {/* HERO */}
       {(state.stage === "idle" || state.stage === "error") && (
         <section className="w-full pt-2 sm:pt-8 pb-14 sm:pb-20">
-          <div className="mx-auto grid w-full max-w-[1400px] gap-4 px-5 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-start lg:gap-14">
+          <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-5 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-12">
             {/* Text column */}
             <div className="animate-rise order-2 min-w-0 lg:order-1">
               <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)]">
                 <Stethoscope className="size-3.5" strokeWidth={1.8} />
                 For clinicians · after the visit
               </span>
-              <h1 className="mt-6 font-display text-balance text-[2.4rem] leading-[1] tracking-[-0.04em] text-foreground sm:text-[2.9rem] md:text-[3.2rem] lg:text-[3rem] xl:text-[3.5rem]">
+              <h1 className="mt-6 font-display text-balance text-[2.6rem] leading-[1] tracking-[-0.04em] text-foreground sm:text-[3.1rem] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
                 Walk out with the note{" "}
                 <span className="text-[color:var(--sage-deep)]">
                   already written.
@@ -257,7 +257,7 @@ export default function HomePage() {
             {/* Video column — edge-to-edge on the right */}
             <a
               href="#start"
-              className="animate-rise relative order-1 mx-auto block aspect-[16/10] w-full min-w-0 max-w-[420px] overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] sm:max-w-none lg:order-2 lg:mt-0"
+              className="animate-rise relative order-1 mx-auto block aspect-[16/10] w-full min-w-0 max-w-[420px] overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] sm:max-w-none lg:order-2 lg:ml-auto lg:mt-0 lg:-mr-4 xl:-mr-8"
               aria-label="Watch the explainer and start the demo"
             >
               <ExplainerPlayer />
@@ -659,7 +659,7 @@ export default function HomePage() {
       {/* Full-bleed steel-blue band — closing CTA */}
       {(state.stage === "idle" || state.stage === "error") && (
         <section className="w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
-          <div className="mx-auto max-w-4xl px-5 text-center sm:px-8">
+          <div className="mx-auto max-w-6xl px-5 text-center sm:px-8">
             <span className="text-[11px] uppercase tracking-[0.22em] opacity-75">
               A quieter way
             </span>

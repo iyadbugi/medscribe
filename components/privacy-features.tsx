@@ -34,7 +34,7 @@ export function PrivacyFeatures() {
   return (
     <section
       id="privacy"
-      className="relative w-full scroll-mt-24 bg-card px-4 py-12 sm:px-6 sm:py-14 lg:px-8"
+      className="relative w-full scroll-mt-24 bg-card py-12 sm:py-14"
     >
       {/* Dashed grid wash, fading in from top-right */}
       <div
@@ -60,7 +60,7 @@ export function PrivacyFeatures() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1400px]">
+      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8">
         {/* Header */}
         <div className="mb-8 md:mb-10">
           <motion.span
@@ -80,8 +80,7 @@ export function PrivacyFeatures() {
             transition={{ duration: 0.4, delay: 0.05 }}
             className="mt-2 max-w-3xl font-display text-3xl leading-[1.02] tracking-[-0.03em] text-foreground sm:text-4xl md:text-5xl"
           >
-            Built around UAE health data law —{" "}
-            <span className="font-display-italic">by design</span>.
+            Built around UAE health data law.
           </motion.h2>
 
           <motion.p
