@@ -215,6 +215,10 @@
   }
 }
 
+html {
+  scroll-padding-top: 80px;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);

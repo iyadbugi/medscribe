@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces, Bricolage_Grotesque } from "next/font/google";
 import { ShieldCheck, MicVocal, FileText, Stethoscope } from "lucide-react";
+import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -51,6 +52,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-clip">
+        <SmoothScroll>
         <div className="grain pointer-events-none fixed inset-0 -z-10" />
 
         <div className="border-b border-[color-mix(in_oklch,var(--sage-deep)_18%,transparent)] bg-[color-mix(in_oklch,var(--mint)_72%,var(--background))]">
@@ -154,6 +156,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        </SmoothScroll>
       </body>
     </html>
   );
