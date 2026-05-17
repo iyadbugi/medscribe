@@ -30,7 +30,7 @@ export function HowItWorks() {
   return (
     <section
       id="how"
-      className="w-full py-16 sm:py-20"
+      className="bg-cream-blend flex w-full min-h-[100svh] flex-col justify-center py-24"
     >
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">

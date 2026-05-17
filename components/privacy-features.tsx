@@ -39,7 +39,7 @@ function SpotlightPillar({
         className="pointer-events-none absolute inset-0 hidden opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block"
         style={{
           background:
-            "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklch, var(--clay) 22%, transparent), transparent 55%)",
+            "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklch, oklch(0.72 0.16 235) 40%, transparent), transparent 55%)",
         }}
       />
       {children}
@@ -78,7 +78,7 @@ export function PrivacyFeatures() {
   return (
     <section
       id="privacy"
-      className="relative w-full bg-card py-16 sm:py-20"
+      className="relative flex w-full min-h-[100svh] flex-col justify-center bg-card py-24"
     >
       {/* Dashed grid wash, fading in from top-right */}
       <div
@@ -92,12 +92,12 @@ export function PrivacyFeatures() {
           maskImage: `
             repeating-linear-gradient(to right, black 0 3px, transparent 3px 8px),
             repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 8px),
-            radial-gradient(ellipse 100% 100% at 100% 0%, #000 20%, transparent 80%)
+            radial-gradient(ellipse 110% 90% at 100% 100%, #000 15%, transparent 85%)
           `,
           WebkitMaskImage: `
             repeating-linear-gradient(to right, black 0 3px, transparent 3px 8px),
             repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 8px),
-            radial-gradient(ellipse 100% 100% at 100% 0%, #000 20%, transparent 80%)
+            radial-gradient(ellipse 110% 90% at 100% 100%, #000 15%, transparent 85%)
           `,
           maskComposite: "intersect",
           WebkitMaskComposite: "source-in",
@@ -161,7 +161,7 @@ export function PrivacyFeatures() {
                       className="absolute inset-0 rounded-full"
                       style={{
                         background:
-                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, var(--clay) 32%, transparent) 0%, transparent 70%)",
+                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, oklch(0.72 0.16 235) 55%, transparent) 0%, transparent 70%)",
                       }}
                     />
                     <Icon

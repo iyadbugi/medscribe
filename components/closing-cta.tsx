@@ -5,7 +5,7 @@ import { BlurText } from "@/components/motion/blur-text";
 
 export function ClosingCta() {
   return (
-    <section className="w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
+    <section className="flex w-full min-h-[100svh] flex-col justify-center bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
       <div className="mx-auto max-w-6xl px-5 text-center sm:px-8">
         <BlurText
           as="span"

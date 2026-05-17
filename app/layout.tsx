@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces, Bricolage_Grotesque } from "next/font/google";
-import { ShieldCheck, MicVocal, FileText, Stethoscope } from "lucide-react";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import GlassSurface from "@/components/GlassSurface";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,15 +32,6 @@ export const metadata: Metadata = {
     "Dictate after the visit. Walk out with a clinical SOAP note and a patient-friendly handout, drafted by AI and edited by you.",
 };
 
-const marqueeItems = [
-  { icon: ShieldCheck, label: "Audio stays in your browser" },
-  { icon: MicVocal, label: "One pass dictation" },
-  { icon: FileText, label: "SOAP + patient handout in one go" },
-  { icon: Stethoscope, label: "Edit before export" },
-  { icon: ShieldCheck, label: "No PHI written to disk" },
-  { icon: MicVocal, label: "Works after the visit, not during" },
-];
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,55 +44,58 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-background text-foreground relative overflow-x-clip">
         <SmoothScroll>
-        <div className="grain pointer-events-none fixed inset-0 -z-10" />
 
-        <div className="border-b border-[color-mix(in_oklch,var(--sage-deep)_18%,transparent)] bg-[color-mix(in_oklch,var(--mint)_72%,var(--background))]">
-          <div className="overflow-hidden">
-            <div className="animate-marquee flex w-max gap-10 py-2.5 text-[11px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]">
-              {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((it, i) => (
-                <span key={i} className="flex items-center gap-2 whitespace-nowrap">
-                  <it.icon className="size-3.5 opacity-70" strokeWidth={1.6} />
-                  <span className="font-medium">{it.label}</span>
-                  <span className="opacity-40">·</span>
+        <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-4 sm:top-4">
+          <GlassSurface
+            width={"min(94vw, 760px)" as unknown as number}
+            height={56}
+            borderRadius={46}
+            borderWidth={0.18}
+            brightness={50}
+            opacity={0.93}
+            blur={11}
+            displace={0.5}
+            backgroundOpacity={0.32}
+            saturation={1}
+            distortionScale={-180}
+            redOffset={0}
+            greenOffset={6}
+            blueOffset={20}
+            className="pointer-events-auto"
+          >
+            <nav className="flex h-full w-full items-center justify-between gap-2 pl-4 pr-2 sm:pl-5 sm:pr-2">
+              <a href="/" className="group flex items-baseline gap-1">
+                <span className="font-display text-xl leading-none tracking-tight text-[color:var(--sage-deep)] drop-shadow-[0_1px_0_rgba(255,255,255,0.4)] sm:text-2xl">
+                  med
                 </span>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <header className="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/72 bg-background/85 border-b border-border/60">
-          <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between px-5 py-4 sm:px-8">
-            <a href="/" className="group flex items-baseline gap-1">
-              <span className="font-display text-2xl leading-none tracking-tight text-[color:var(--sage-deep)]">
-                med
-              </span>
-              <span className="font-display-italic text-2xl leading-none tracking-tight text-foreground">
-                scribe
-              </span>
-              <span className="ml-0.5 size-1.5 translate-y-[-2px] rounded-full bg-[color:var(--clay)]" />
-            </a>
-            <nav className="flex items-center gap-1 text-sm">
-              <a
-                href="#how"
-                className="hidden sm:inline-flex h-9 items-center rounded-full px-4 text-foreground/70 hover:text-foreground transition-colors"
-              >
-                How it works
+                <span className="font-display-italic text-xl leading-none tracking-tight text-foreground drop-shadow-[0_1px_0_rgba(255,255,255,0.4)] sm:text-2xl">
+                  scribe
+                </span>
+                <span className="ml-0.5 size-1.5 translate-y-[-2px] rounded-full bg-[color:var(--clay)]" />
               </a>
-              <a
-                href="#privacy"
-                className="hidden sm:inline-flex h-9 items-center rounded-full px-4 text-foreground/70 hover:text-foreground transition-colors"
-              >
-                Privacy
-              </a>
-              <a
-                href="#start"
-                className="ml-1 inline-flex h-9 items-center gap-2 rounded-full border border-[color:var(--sage-deep)] bg-[color:var(--sage-deep)] px-4 text-[color:var(--primary-foreground)] hover:opacity-90 transition-opacity"
-              >
-                <span className="size-1.5 rounded-full bg-[color:var(--clay)]" />
-                Try the demo
-              </a>
+              <div className="flex items-center gap-0.5 text-sm">
+                <a
+                  href="#how"
+                  className="hidden sm:inline-flex h-9 items-center rounded-full px-3.5 text-foreground/85 drop-shadow-[0_1px_0_rgba(255,255,255,0.4)] hover:text-foreground transition-colors"
+                >
+                  How it works
+                </a>
+                <a
+                  href="#privacy"
+                  className="hidden sm:inline-flex h-9 items-center rounded-full px-3.5 text-foreground/85 drop-shadow-[0_1px_0_rgba(255,255,255,0.4)] hover:text-foreground transition-colors"
+                >
+                  Privacy
+                </a>
+                <a
+                  href="#start"
+                  className="ml-1 inline-flex h-10 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-4 text-sm text-[color:var(--primary-foreground)] shadow-[0_4px_14px_-4px_color-mix(in_oklch,var(--sage-deep)_55%,transparent)] hover:opacity-90 transition-opacity"
+                >
+                  <span className="size-1.5 rounded-full bg-[color:var(--clay)]" />
+                  Try the demo
+                </a>
+              </div>
             </nav>
-          </div>
+          </GlassSurface>
         </header>
 
         {children}
@@ -116,6 +110,7 @@ export default function RootLayout({
                 <span className="font-display-italic text-xl tracking-tight text-foreground">
                   scribe
                 </span>
+                <span className="ml-0.5 size-1.5 translate-y-[-2px] rounded-full bg-[color:var(--clay)]" />
               </div>
               <p className="mt-3 max-w-xs text-sm text-muted-foreground">
                 A quiet little instrument for clinicians who&rsquo;d rather be

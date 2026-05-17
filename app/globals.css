@@ -57,8 +57,8 @@
 }
 
 :root {
-  /* Warm off-white base — Hers cream */
-  --background: oklch(0.985 0.004 95);
+  /* Pure white base — clinical/medtech canvas */
+  --background: oklch(1 0 0);
   --foreground: oklch(0.16 0.01 250);
 
   /* Card surfaces — pure white tiles */
@@ -71,12 +71,12 @@
   --primary: oklch(0.22 0.04 250);
   --primary-foreground: oklch(0.985 0.004 95);
 
-  /* Secondary: cream chip */
-  --secondary: oklch(0.96 0.008 90);
+  /* Secondary: cool chip */
+  --secondary: oklch(0.96 0.008 250);
   --secondary-foreground: oklch(0.22 0.04 250);
 
   /* Muted */
-  --muted: oklch(0.955 0.006 90);
+  --muted: oklch(0.955 0.006 250);
   --muted-foreground: oklch(0.48 0.015 250);
 
   /* Accent: steel-blue tint */
@@ -85,8 +85,8 @@
 
   --destructive: oklch(0.58 0.19 28);
 
-  --border: oklch(0.9 0.01 90);
-  --input: oklch(0.93 0.008 90);
+  --border: oklch(0.9 0.01 250);
+  --input: oklch(0.93 0.008 250);
   --ring: oklch(0.55 0.08 250);
 
   /* Brand palette */
@@ -161,18 +161,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-image:
-      radial-gradient(
-        ellipse 80% 60% at 15% -10%,
-        color-mix(in oklch, var(--mint) 40%, transparent),
-        transparent 60%
-      ),
-      radial-gradient(
-        ellipse 70% 50% at 110% 8%,
-        color-mix(in oklch, var(--clay) 22%, transparent),
-        transparent 55%
-      );
-    background-attachment: fixed;
   }
   html {
     @apply font-sans;
@@ -188,6 +176,15 @@
 }
 
 @layer utilities {
+  .bg-cream-blend {
+    background: linear-gradient(
+      to bottom,
+      var(--background) 0%,
+      var(--cream) 15%,
+      var(--cream) 85%,
+      var(--background) 100%
+    );
+  }
   .font-display {
     font-family: var(--font-display);
     font-weight: 700;
@@ -216,7 +213,7 @@
 }
 
 html {
-  scroll-padding-top: 80px;
+  scroll-padding-top: 88px;
 }
 
 @keyframes marquee {

@@ -14,6 +14,9 @@ import {
   Stethoscope,
   Waves,
   PenLine,
+  ShieldCheck,
+  MicVocal,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Recorder } from "@/components/recorder";
@@ -24,6 +27,7 @@ import { HandoutDocument } from "@/components/pdf/handout-document";
 import { PrivacyFeatures } from "@/components/privacy-features";
 import { HowItWorks } from "@/components/how-it-works";
 import { ClosingCta } from "@/components/closing-cta";
+import Grainient from "@/components/Grainient";
 import {
   emptySummary,
   type SummaryResponse,
@@ -37,7 +41,7 @@ const PDFDownloadLink = dynamic(
 
 const ExplainerPlayer = dynamic(
   () => import("@/components/explainer-player").then((m) => m.ExplainerPlayer),
-  { ssr: false, loading: () => <div className="aspect-[3/2] w-full rounded-[28px] bg-[color:var(--cream)]" /> }
+  { ssr: false, loading: () => <div className="aspect-[3/2] w-full rounded-[28px] bg-[color:var(--secondary)]" /> }
 );
 
 type Stage = "idle" | "transcribing" | "summarizing" | "review" | "error";
@@ -91,6 +95,15 @@ function reducer(state: State, action: Action): State {
       return state;
   }
 }
+
+const marqueeItems = [
+  { icon: ShieldCheck, label: "Audio stays in your browser" },
+  { icon: MicVocal, label: "One pass dictation" },
+  { icon: FileText, label: "SOAP + patient handout in one go" },
+  { icon: Stethoscope, label: "Edit before export" },
+  { icon: ShieldCheck, label: "No PHI written to disk" },
+  { icon: MicVocal, label: "Works after the visit, not during" },
+];
 
 const steps = [
   {
@@ -207,7 +220,34 @@ export default function HomePage() {
     <main className="relative flex w-full flex-1 flex-col">
       {/* HERO */}
       {(state.stage === "idle" || state.stage === "error") && (
-        <section className="flex w-full flex-col pt-3 pb-8 min-h-[calc(100svh-92px)] sm:min-h-0 sm:pt-4 sm:pb-14 lg:pb-20">
+        <section className="relative flex w-full min-h-[100svh] flex-col overflow-hidden bg-[linear-gradient(135deg,#a8c0de_0%,#cadcf5_50%,#e4ecf7_100%)]">
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <Grainient
+              color1="#a8c0de"
+              color2="#cadcf5"
+              color3="#e4ecf7"
+              timeSpeed={0.25}
+              colorBalance={0}
+              warpStrength={1}
+              warpFrequency={5}
+              warpSpeed={2}
+              warpAmplitude={50}
+              blendAngle={0}
+              blendSoftness={0.05}
+              rotationAmount={500}
+              noiseScale={2}
+              grainAmount={0.1}
+              grainScale={2}
+              grainAnimated={false}
+              contrast={1.5}
+              gamma={1}
+              saturation={1}
+              centerX={0}
+              centerY={0}
+              zoom={0.9}
+            />
+          </div>
+          <div className="relative z-10 flex flex-1 flex-col justify-center pt-24 pb-12">
           <div className="mx-auto grid w-full max-w-[1400px] gap-y-2 px-5 sm:gap-y-5 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-x-12 lg:gap-y-0 lg:[grid-template-areas:'upper_anim'_'lower_anim']">
             {/* Headline + lede */}
             <div className="animate-rise min-w-0 lg:[grid-area:upper] lg:self-end">
@@ -217,7 +257,7 @@ export default function HomePage() {
               </span>
               <h1 className="mt-4 font-display text-balance text-[1.95rem] leading-[1.04] tracking-[-0.04em] text-foreground sm:mt-6 sm:text-[3.1rem] sm:leading-[1] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
                 Walk out with the note{" "}
-                <span className="text-[color:var(--sage-deep)]">
+                <span className="font-display-italic text-[color:var(--sage-deep)]">
                   already written.
                 </span>
               </h1>
@@ -272,11 +312,23 @@ export default function HomePage() {
               </dl>
             </div>
           </div>
+          </div>
+          <div className="relative z-10 overflow-hidden border-y border-[color-mix(in_oklch,var(--sage-deep)_10%,transparent)] bg-white">
+            <div className="animate-marquee flex w-max gap-10 py-2.5 text-[11px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/70">
+              {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((it, i) => (
+                <span key={i} className="flex items-center gap-2 whitespace-nowrap">
+                  <it.icon className="size-3.5 opacity-70" strokeWidth={1.6} />
+                  <span className="font-medium">{it.label}</span>
+                  <span className="opacity-40">·</span>
+                </span>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
       {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD (full-bleed white band) */}
-      <section id="start" className="w-full bg-card pt-6 sm:pt-10 pb-20 sm:pb-24">
+      <section id="start" className="w-full bg-card pt-16 sm:pt-20 pb-20 sm:pb-24">
         <div
           ref={stageSectionRef}
           className="mx-auto w-full max-w-6xl px-5 sm:px-8"
@@ -296,7 +348,7 @@ export default function HomePage() {
                     isDone
                       ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
                       : isActive
-                      ? "bg-[color:var(--clay)] text-foreground"
+                      ? "bg-[color:var(--clay)] text-[color:var(--primary-foreground)]"
                       : "bg-secondary text-muted-foreground"
                   }`}
                 >
@@ -343,7 +395,7 @@ export default function HomePage() {
               </div>
             </section>
 
-            <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_55%,var(--card))] to-[color-mix(in_oklch,var(--cream)_55%,var(--card))] p-6 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] sm:p-7">
+            <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_45%,var(--card))] to-[color:var(--card)] p-6 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] sm:p-7">
               <div className="absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 02 · Dictation
               </div>
@@ -379,7 +431,7 @@ export default function HomePage() {
         {/* PROCESSING — VERTICAL TIMELINE */}
         {(state.stage === "transcribing" || state.stage === "summarizing") && (
           <div className="grid gap-6 lg:grid-cols-[0.6fr_1.4fr]">
-            <aside className="relative hidden overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_60%,var(--card))] to-[color-mix(in_oklch,var(--cream)_60%,var(--card))] p-7 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] lg:block">
+            <aside className="relative hidden overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_55%,var(--card))] to-[color:var(--card)] p-7 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] lg:block">
               <span className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 In progress
               </span>
@@ -414,7 +466,7 @@ export default function HomePage() {
                           isDone
                             ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] ring-[color-mix(in_oklch,var(--mint)_80%,transparent)]"
                             : isActive
-                            ? "bg-[color:var(--clay)] text-foreground ring-[color-mix(in_oklch,var(--clay)_30%,transparent)]"
+                            ? "bg-[color:var(--clay)] text-[color:var(--primary-foreground)] ring-[color-mix(in_oklch,var(--clay)_30%,transparent)]"
                             : "bg-secondary text-muted-foreground ring-[color:var(--background)]"
                         }`}
                       >
@@ -507,7 +559,7 @@ export default function HomePage() {
               </div>
             </section>
 
-            <aside className="relative flex flex-col gap-4 overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_60%,var(--card))] to-[color-mix(in_oklch,var(--cream)_60%,var(--card))] p-6 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] sm:p-7">
+            <aside className="relative flex flex-col gap-4 overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_55%,var(--card))] to-[color:var(--card)] p-6 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] sm:p-7">
               <span className="text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 Export
               </span>
