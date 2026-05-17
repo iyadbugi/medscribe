@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from "react";
 import dynamic from "next/dynamic";
+import { useLenis } from "lenis/react";
 import {
   FileDown,
   RefreshCw,
@@ -21,6 +22,8 @@ import { SummaryReview } from "@/components/summary-review";
 import { SoapDocument } from "@/components/pdf/soap-document";
 import { HandoutDocument } from "@/components/pdf/handout-document";
 import { PrivacyFeatures } from "@/components/privacy-features";
+import { HowItWorks } from "@/components/how-it-works";
+import { ClosingCta } from "@/components/closing-cta";
 import {
   emptySummary,
   type SummaryResponse,
@@ -127,20 +130,22 @@ export default function HomePage() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
   const stageSectionRef = useRef<HTMLElement | null>(null);
   const prevStageRef = useRef(state.stage);
+  const lenis = useLenis();
 
   useEffect(() => {
     const prev = prevStageRef.current;
     prevStageRef.current = state.stage;
     if (prev === state.stage) return;
     if (state.stage === "idle") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (lenis) lenis.scrollTo(0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     const el = stageSectionRef.current;
     if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY - 80;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-  }, [state.stage]);
+    if (lenis) lenis.scrollTo(el, { offset: -80 });
+    else el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [state.stage, lenis]);
 
   const runPipeline = async (audio: Blob, metadata: VisitMetadata) => {
     dispatch({ type: "begin_transcribe", audio });
@@ -202,41 +207,54 @@ export default function HomePage() {
     <main className="relative flex w-full flex-1 flex-col">
       {/* HERO */}
       {(state.stage === "idle" || state.stage === "error") && (
-        <section className="w-full pt-2 sm:pt-8 pb-14 sm:pb-20">
-          <div className="mx-auto grid w-full max-w-[1400px] gap-6 px-5 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-12">
-            {/* Text column */}
-            <div className="animate-rise order-2 min-w-0 lg:order-1">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)]">
+        <section className="flex w-full flex-col pt-3 pb-8 min-h-[calc(100svh-92px)] sm:min-h-0 sm:pt-4 sm:pb-14 lg:pb-20">
+          <div className="mx-auto grid w-full max-w-[1400px] gap-y-2 px-5 sm:gap-y-5 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-x-12 lg:gap-y-0 lg:[grid-template-areas:'upper_anim'_'lower_anim']">
+            {/* Headline + lede */}
+            <div className="animate-rise min-w-0 lg:[grid-area:upper] lg:self-end">
+              <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)] sm:px-3 sm:py-1.5 sm:text-[11px]">
                 <Stethoscope className="size-3.5" strokeWidth={1.8} />
                 For clinicians · after the visit
               </span>
-              <h1 className="mt-6 font-display text-balance text-[2.6rem] leading-[1] tracking-[-0.04em] text-foreground sm:text-[3.1rem] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
+              <h1 className="mt-4 font-display text-balance text-[1.95rem] leading-[1.04] tracking-[-0.04em] text-foreground sm:mt-6 sm:text-[3.1rem] sm:leading-[1] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
                 Walk out with the note{" "}
                 <span className="text-[color:var(--sage-deep)]">
                   already written.
                 </span>
               </h1>
-              <p className="mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mt-3 max-w-xl text-pretty text-sm leading-snug text-muted-foreground sm:mt-6 sm:text-lg sm:leading-relaxed">
                 Dictate a short post-visit summary. MedScribe returns an
                 editable SOAP note and a plain-English handout, both
                 downloadable as PDF in under a minute.
               </p>
-              <div className="mt-8 flex flex-wrap items-center gap-5">
+            </div>
+
+            {/* Animation — between text and CTA on mobile, right column on desktop */}
+            <a
+              href="#start"
+              className="animate-rise relative mx-auto block aspect-[5/4] w-full min-w-0 max-w-[300px] overflow-hidden [animation-delay:120ms] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[560px] lg:-translate-y-2 lg:[grid-area:anim] xl:max-w-[620px]"
+              aria-label="Watch the explainer and start the demo"
+            >
+              <ExplainerPlayer />
+            </a>
+
+            {/* CTA + stats */}
+            <div className="animate-rise min-w-0 [animation-delay:80ms] lg:[grid-area:lower] lg:self-start lg:pt-8">
+              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <a
                   href="#start"
-                  className="inline-flex h-14 items-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-8 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-7 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all sm:h-14 sm:px-8"
                 >
                   Start the demo
                   <ArrowRight className="size-4" strokeWidth={1.8} />
                 </a>
                 <a
                   href="#how"
-                  className="text-sm font-medium text-foreground/70 underline decoration-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)] decoration-2 underline-offset-[6px] hover:text-foreground hover:decoration-[color:var(--sage-deep)] transition-colors"
+                  className="self-center text-sm font-medium text-foreground/70 underline decoration-[color-mix(in_oklch,var(--sage-deep)_30%,transparent)] decoration-2 underline-offset-[6px] hover:text-foreground hover:decoration-[color:var(--sage-deep)] transition-colors sm:self-auto"
                 >
                   How it works
                 </a>
               </div>
-              <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-border/60 pt-6 sm:gap-8">
+              <dl className="mt-5 grid grid-cols-3 gap-4 border-t border-border/60 pt-5 sm:mt-10 sm:gap-8 sm:pt-6">
                 {[
                   { k: "~40s", v: "avg draft time" },
                   { k: "2 docs", v: "SOAP + handout" },
@@ -253,15 +271,6 @@ export default function HomePage() {
                 ))}
               </dl>
             </div>
-
-            {/* Video column — edge-to-edge on the right */}
-            <a
-              href="#start"
-              className="animate-rise relative order-1 mx-auto block aspect-[16/10] w-full min-w-0 max-w-[420px] overflow-hidden [animation-delay:120ms] sm:aspect-[5/4] sm:max-w-none lg:order-2 lg:ml-auto lg:mt-0 lg:-mr-4 xl:-mr-8"
-              aria-label="Watch the explainer and start the demo"
-            >
-              <ExplainerPlayer />
-            </a>
           </div>
         </section>
       )}
@@ -271,7 +280,7 @@ export default function HomePage() {
         <div
           id="start"
           ref={stageSectionRef}
-          className="mx-auto w-full max-w-6xl scroll-mt-24 px-5 sm:px-8"
+          className="mx-auto w-full max-w-6xl scroll-mt-10 px-5 sm:px-8"
         >
           <div className="mb-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
             Try it
@@ -578,78 +587,7 @@ export default function HomePage() {
       </section>
 
       {/* HOW IT WORKS — only on idle */}
-      {(state.stage === "idle" || state.stage === "error") && (
-        <section
-          id="how"
-          className="mx-auto w-full max-w-6xl px-5 sm:px-8 py-20 sm:py-24"
-        >
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <span className="text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
-                How it works
-              </span>
-              <h2 className="mt-3 font-display text-4xl leading-[1.02] tracking-[-0.03em] sm:text-5xl">
-                Four steps, finished
-                <br />
-                before your coffee gets cold.
-              </h2>
-            </div>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              MedScribe is built for the moment right after a patient leaves the
-              room — when memory is sharpest and time is shortest.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((s, i) => {
-              const isMint = i % 2 === 0;
-              return (
-                <article
-                  key={s.key}
-                  className={`group relative overflow-hidden rounded-[28px] p-7 transition-all hover:-translate-y-1 ${
-                    isMint
-                      ? "bg-[color:var(--mint)]"
-                      : "bg-[color:var(--cream)] ring-1 ring-border/60"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center rounded-full bg-[color-mix(in_oklch,var(--clay)_55%,transparent)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.18em] text-[color:var(--sage-deep)]">
-                      Step 0{i + 1}
-                    </span>
-                    <span
-                      className={`grid size-10 place-items-center rounded-full ${
-                        isMint
-                          ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
-                          : "bg-[color:var(--mint)] text-[color:var(--sage-deep)]"
-                      }`}
-                    >
-                      <s.icon className="size-4" strokeWidth={1.8} />
-                    </span>
-                  </div>
-                  <h3
-                    className={`mt-12 font-display text-2xl leading-tight tracking-[-0.03em] ${
-                      isMint
-                        ? "text-[color:var(--sage-deep)]"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {s.title}.
-                  </h3>
-                  <p
-                    className={`mt-2 text-sm leading-relaxed ${
-                      isMint
-                        ? "text-[color:var(--sage-deep)]/80"
-                        : "text-muted-foreground"
-                    }`}
-                  >
-                    {s.blurb}
-                  </p>
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )}
+      {(state.stage === "idle" || state.stage === "error") && <HowItWorks />}
 
       {/* PRIVACY — UAE health data law posture (features-style grid) */}
       {(state.stage === "idle" || state.stage === "error") && (
@@ -657,31 +595,7 @@ export default function HomePage() {
       )}
 
       {/* Full-bleed steel-blue band — closing CTA */}
-      {(state.stage === "idle" || state.stage === "error") && (
-        <section className="w-full bg-[color:var(--sage)] py-24 text-[color:var(--primary-foreground)]">
-          <div className="mx-auto max-w-6xl px-5 text-center sm:px-8">
-            <span className="text-[11px] uppercase tracking-[0.22em] opacity-75">
-              A quieter way
-            </span>
-            <h2 className="mt-5 font-display text-5xl leading-[1.02] tracking-[-0.04em] sm:text-6xl">
-              Notes that{" "}
-              <span className="font-display-italic">finish themselves.</span>
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed opacity-85 sm:text-lg">
-              Memory is sharpest the moment after a visit ends. MedScribe
-              turns that minute into a signed note and a plain-English
-              handout for the patient who just walked out.
-            </p>
-            <a
-              href="#start"
-              className="mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--primary-foreground)] px-7 text-sm font-medium text-[color:var(--sage-deep)] hover:opacity-90 transition-opacity"
-            >
-              Try the demo
-              <ArrowRight className="size-4" strokeWidth={1.8} />
-            </a>
-          </div>
-        </section>
-      )}
+      {(state.stage === "idle" || state.stage === "error") && <ClosingCta />}
     </main>
   );
 }

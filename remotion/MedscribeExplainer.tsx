@@ -41,9 +41,9 @@ const Stage: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     style={{
       backgroundColor: "transparent",
       display: "flex",
-      alignItems: "flex-start",
+      alignItems: "center",
       justifyContent: "center",
-      paddingTop: 100,
+      padding: "60px 0",
     }}
   >
     {children}
@@ -57,39 +57,46 @@ const Scene2Recording: React.FC<{ frame: number }> = ({ frame }) => {
   const barCount = 22;
 
   return (
-    <Stage>
+    <AbsoluteFill
+      style={{
+        backgroundColor: "transparent",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <div style={{ textAlign: "center", opacity: exit, width: "100%" }}>
         <Eyebrow opacity={fade(localFrame, 0, 12, 95, 115)}>01 · Record</Eyebrow>
         <div
           style={{
-            width: 400,
-            height: 400,
+            width: 560,
+            height: 560,
             borderRadius: "50%",
             background: COLORS.mint,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            margin: "56px auto 0",
+            margin: "48px auto 0",
             transform: `scale(${0.6 + enter * 0.4})`,
-            boxShadow: `0 0 0 ${20 + Math.sin(localFrame * 0.18) * 12}px ${COLORS.mint}55`,
+            boxShadow: `0 0 0 ${28 + Math.sin(localFrame * 0.18) * 16}px ${COLORS.mint}55`,
           }}
         >
-          <svg width="128" height="128" viewBox="0 0 24 24" fill="none">
+          <svg width="180" height="180" viewBox="0 0 24 24" fill="none">
             <rect x="9" y="3" width="6" height="12" rx="3" fill={COLORS.mintInk} />
             <path d="M6 11a6 6 0 0 0 12 0M12 17v4" stroke={COLORS.mintInk} strokeWidth="1.6" strokeLinecap="round" />
           </svg>
         </div>
-        <div style={{ marginTop: 64, display: "flex", alignItems: "center", justifyContent: "center", gap: 12, height: 120 }}>
+        <div style={{ marginTop: 56, display: "flex", alignItems: "center", justifyContent: "center", gap: 14, height: 140 }}>
           {Array.from({ length: barCount }).map((_, i) => {
             const phase = localFrame * 0.22 + i * 0.45;
-            const h = 24 + Math.abs(Math.sin(phase)) * 90 * Math.min(1, enter);
+            const h = 28 + Math.abs(Math.sin(phase)) * 108 * Math.min(1, enter);
             return (
               <div
                 key={i}
                 style={{
-                  width: 12,
+                  width: 14,
                   height: h,
-                  borderRadius: 6,
+                  borderRadius: 7,
                   background: COLORS.mintInk,
                   opacity: 0.85,
                 }}
@@ -98,7 +105,7 @@ const Scene2Recording: React.FC<{ frame: number }> = ({ frame }) => {
           })}
         </div>
       </div>
-    </Stage>
+    </AbsoluteFill>
   );
 };
 

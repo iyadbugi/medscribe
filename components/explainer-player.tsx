@@ -1,12 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Player, type PlayerRef } from "@remotion/player";
 import { MedscribeExplainer } from "@/remotion/MedscribeExplainer";
+import { MedscribeExplainerMobile } from "@/remotion/MedscribeExplainerMobile";
 
 export function ExplainerPlayer() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<PlayerRef>(null);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window === "undefined"
+      ? false
+      : window.matchMedia("(max-width: 639px)").matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -32,11 +46,10 @@ export function ExplainerPlayer() {
           }
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     io.observe(wrap);
 
-    // Retry play on first user gesture in case browser autoplay was blocked.
     const onGesture = () => {
       try {
         playerRef.current?.play();
@@ -52,17 +65,18 @@ export function ExplainerPlayer() {
       window.removeEventListener("pointerdown", onGesture);
       window.removeEventListener("keydown", onGesture);
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <div ref={wrapRef} className="absolute inset-0">
       <Player
+        key={isMobile ? "mobile" : "desktop"}
         ref={playerRef}
-        component={MedscribeExplainer}
+        component={isMobile ? MedscribeExplainerMobile : MedscribeExplainer}
         durationInFrames={465}
         fps={30}
-        compositionWidth={1200}
-        compositionHeight={960}
+        compositionWidth={isMobile ? 1000 : 1200}
+        compositionHeight={isMobile ? 800 : 960}
         style={{ width: "100%", height: "100%", display: "block" }}
         autoPlay
         loop

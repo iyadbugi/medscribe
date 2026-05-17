@@ -1,7 +1,51 @@
 "use client";
 
+import { useRef, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { Server, Cpu, MicOff, FolderLock } from "lucide-react";
+import { BlurText } from "@/components/motion/blur-text";
+
+function SpotlightPillar({
+  className,
+  delay,
+  children,
+}: {
+  className: string;
+  delay: number;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 18, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-10% 0px" }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+      className={`group ${className}`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block"
+        style={{
+          background:
+            "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklch, var(--clay) 22%, transparent), transparent 55%)",
+        }}
+      />
+      {children}
+    </motion.div>
+  );
+}
 
 const features = [
   {
@@ -34,7 +78,7 @@ export function PrivacyFeatures() {
   return (
     <section
       id="privacy"
-      className="relative w-full scroll-mt-24 bg-card py-12 sm:py-14"
+      className="relative w-full scroll-mt-10 bg-card py-12 sm:py-14 lg:flex lg:min-h-screen lg:items-center lg:py-0"
     >
       {/* Dashed grid wash, fading in from top-right */}
       <div
@@ -63,37 +107,30 @@ export function PrivacyFeatures() {
       <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8">
         {/* Header */}
         <div className="mb-8 md:mb-10">
-          <motion.span
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80"
+          <BlurText
+            as="span"
+            className="block text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80"
           >
             Privacy
-          </motion.span>
+          </BlurText>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.05 }}
+          <BlurText
+            as="h2"
+            delay={0.08}
             className="mt-2 max-w-3xl font-display text-3xl leading-[1.02] tracking-[-0.03em] text-foreground sm:text-4xl md:text-5xl"
           >
             Built around UAE health data law.
-          </motion.h2>
+          </BlurText>
 
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+          <BlurText
+            as="p"
+            delay={0.16}
             className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base"
           >
             Federal Law No. 2 of 2019, the PDPL, and DHA&rsquo;s AI Policy
             don&rsquo;t ask for marketing — they ask for architecture. Here is
             ours.
-          </motion.p>
+          </BlurText>
         </div>
 
         {/* Pillars grid — 4 cols on lg, 2 on md, 1 on sm; bordered, no gap */}
@@ -105,13 +142,10 @@ export function PrivacyFeatures() {
             const isRightColOnMd = index % 2 === 1;
             const isLastColOnLg = index === features.length - 1;
             return (
-              <motion.div
+              <SpotlightPillar
                 key={feature.title}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
-                className={`relative bg-card p-5 md:p-6 ${
+                delay={index * 0.09}
+                className={`relative overflow-hidden bg-card p-5 md:p-6 ${
                   isLast ? "" : "border-b border-border"
                 } ${isLastRowOnMd ? "md:border-b-0" : ""} ${
                   isRightColOnMd ? "" : "md:border-r md:border-border"
@@ -144,7 +178,7 @@ export function PrivacyFeatures() {
                 <p className="text-[13px] leading-relaxed text-muted-foreground sm:text-sm">
                   {feature.description}
                 </p>
-              </motion.div>
+              </SpotlightPillar>
             );
           })}
         </div>
