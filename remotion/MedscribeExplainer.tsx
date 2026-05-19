@@ -2,7 +2,7 @@ import { AbsoluteFill, interpolate, useCurrentFrame, spring, useVideoConfig } fr
 
 const COLORS = {
   cream: "#fcfbf8",
-  mint: "#b9cee8",
+  mint: "#a3c5ef",
   mintInk: "#233452",
   ink: "#0f172a",
   navy: "#1a2540",

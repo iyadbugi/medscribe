@@ -40,7 +40,7 @@ function SpotlightPillar({
         className="pointer-events-none absolute inset-0 hidden opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block"
         style={{
           background:
-            "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklch, oklch(0.65 0.14 250) 40%, transparent), transparent 55%)",
+            "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklch, #3b82f6 40%, transparent), transparent 55%)",
         }}
       />
       {children}
@@ -159,7 +159,7 @@ export function PrivacyFeatures() {
                       className="absolute inset-0 rounded-full"
                       style={{
                         background:
-                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, oklch(0.65 0.14 250) 55%, transparent) 0%, transparent 70%)",
+                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, #3b82f6 55%, transparent) 0%, transparent 70%)",
                       }}
                     />
                     <Icon
