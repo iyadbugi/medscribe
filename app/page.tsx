@@ -270,11 +270,8 @@ export default function HomePage() {
                   already written.
                 </span>
               </h1>
-              <p className="mt-3 mx-auto max-w-xl text-sm leading-snug text-muted-foreground sm:hidden">
-                Dictate a short summary. MedScribe returns an editable SOAP
-                note
-                <br />
-                and a patient handout — in under a minute.
+              <p className="mt-3 mx-auto max-w-[19rem] text-balance text-sm leading-snug text-muted-foreground sm:hidden">
+                Dictate the visit. SOAP note + handout, in a minute.
               </p>
               <p className="mt-3 hidden max-w-xl text-pretty text-sm leading-snug text-muted-foreground sm:mt-6 sm:block sm:text-lg sm:leading-relaxed lg:mx-0">
                 Dictate a short post-visit summary. MedScribe returns an

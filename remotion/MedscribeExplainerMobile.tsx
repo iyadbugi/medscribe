@@ -8,7 +8,7 @@ import {
 
 const COLORS = {
   cream: "#fcfbf8",
-  mint: "#cdd9e6",
+  mint: "#b9cee8",
   mintInk: "#233452",
   ink: "#0f172a",
   navy: "#1a2540",
