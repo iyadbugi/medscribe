@@ -47,7 +47,7 @@ export default function RootLayout({
 
         <header className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-4 sm:top-4">
           <GlassSurface
-            width={"min(94vw, 760px)" as unknown as number}
+            width={"min(94vw, 880px)" as unknown as number}
             height={56}
             borderRadius={46}
             borderWidth={0.18}

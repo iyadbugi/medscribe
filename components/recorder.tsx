@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mic, Square, RotateCcw, Play, Pause, ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 
 type Props = {
@@ -63,6 +64,21 @@ export function Recorder({ onComplete, disabled }: Props) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Ambient idle waveform — gentle sine-modulated breathing across the bars.
+  useEffect(() => {
+    if (state !== "idle") return;
+    const start = performance.now();
+    const id = setInterval(() => {
+      const t = performance.now() - start;
+      setBars(() =>
+        Array.from({ length: BARS }, (_, i) =>
+          0.1 + 0.18 * (0.5 + 0.5 * Math.sin(t / 600 + i * 0.35))
+        )
+      );
+    }, 80);
+    return () => clearInterval(id);
+  }, [state]);
 
   const startMeter = (stream: MediaStream) => {
     const ctx = new AudioContext();
@@ -184,8 +200,8 @@ export function Recorder({ onComplete, disabled }: Props) {
   const isLive = state === "recording" || state === "paused";
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="relative flex flex-col items-center gap-6 rounded-[20px] bg-card/80 p-7 ring-1 ring-border/70 backdrop-blur-sm">
+    <div className="flex flex-1 flex-col gap-4">
+      <div className="relative flex flex-1 flex-col items-center justify-center gap-3 rounded-[20px] bg-card/80 p-5 ring-1 ring-border/70 backdrop-blur-sm sm:gap-4">
         {/* Big focal mic */}
         <div className="relative grid place-items-center">
           {state === "recording" && (
@@ -215,12 +231,12 @@ export function Recorder({ onComplete, disabled }: Props) {
                 ? "Resume recording"
                 : "Reset"
             }
-            className={`relative grid size-24 place-items-center rounded-full transition-all duration-300 disabled:opacity-50 ${
+            className={`relative grid size-20 place-items-center rounded-full transition-all duration-300 disabled:opacity-50 ${
               state === "recording"
                 ? "bg-[color:var(--clay)] text-foreground shadow-[0_18px_40px_-18px_color-mix(in_oklch,var(--clay)_70%,transparent)]"
                 : state === "paused"
                 ? "bg-card text-foreground ring-2 ring-[color:var(--clay)]"
-                : "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] shadow-[0_18px_40px_-18px_color-mix(in_oklch,var(--sage-deep)_75%,transparent)] hover:shadow-[0_22px_44px_-18px_color-mix(in_oklch,var(--sage-deep)_85%,transparent)]"
+                : "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)] shadow-[0_28px_60px_-22px_color-mix(in_oklch,var(--sage-deep)_85%,transparent)] hover:shadow-[0_34px_72px_-22px_color-mix(in_oklch,var(--sage-deep)_95%,transparent)]"
             }`}
             style={
               state === "recording"
@@ -228,27 +244,45 @@ export function Recorder({ onComplete, disabled }: Props) {
                 : undefined
             }
           >
+            {state === "idle" && (
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(circle at center, color-mix(in oklch, white 24%, transparent) 0%, transparent 62%)",
+                }}
+                animate={{ opacity: [0, 0.55, 0] }}
+                transition={{ duration: 4, ease: "easeInOut", repeat: Infinity }}
+              />
+            )}
             {state === "recording" ? (
-              <Pause className="size-9" strokeWidth={1.6} />
+              <Pause className="size-7" strokeWidth={1.6} />
             ) : state === "paused" ? (
-              <Play className="size-9" strokeWidth={1.6} />
+              <Play className="size-7" strokeWidth={1.6} />
             ) : state === "stopped" ? (
-              <RotateCcw className="size-8" strokeWidth={1.6} />
+              <RotateCcw className="size-6" strokeWidth={1.6} />
             ) : (
-              <Mic className="size-9" strokeWidth={1.6} />
+              <motion.span
+                className="relative grid place-items-center"
+                animate={{ scale: [1, 1.06, 1] }}
+                transition={{ duration: 4, ease: "easeInOut", repeat: Infinity }}
+              >
+                <Mic className="size-7" strokeWidth={1.6} />
+              </motion.span>
             )}
           </button>
         </div>
 
         {/* Status label */}
-        <div className="flex flex-col items-center gap-1.5">
+        <div className="flex flex-col items-center gap-1">
           <div
-            className="font-mono text-3xl tabular-nums tracking-tight text-foreground"
+            className="font-mono text-2xl tabular-nums tracking-tight text-foreground"
             aria-live="polite"
           >
             {formatTime(elapsed)}
           </div>
-          <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <div className="flex h-[18px] items-center justify-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             {state === "recording" && (
               <>
                 <span className="size-1.5 animate-pulse rounded-full bg-[color:var(--clay)]" />
@@ -277,7 +311,7 @@ export function Recorder({ onComplete, disabled }: Props) {
         </div>
 
         {/* Waveform */}
-        <div className="flex h-10 w-full max-w-sm items-center justify-center gap-[3px]">
+        <div className="flex h-7 w-full max-w-sm items-center justify-center gap-[3px]">
           {bars.map((b, i) => (
             <span
               key={i}
@@ -288,11 +322,11 @@ export function Recorder({ onComplete, disabled }: Props) {
                     : "bg-[color:var(--sage-deep)]"
                   : state === "stopped"
                   ? "bg-[color:var(--sage)]/60"
-                  : "bg-border"
+                  : "bg-[color:var(--sage)]/45"
               }`}
               style={{
                 height: `${Math.max(8, b * 100)}%`,
-                opacity: isLive ? 0.65 + b * 0.35 : 0.55,
+                opacity: isLive ? 0.65 + b * 0.35 : 0.55 + b * 0.3,
               }}
             />
           ))}

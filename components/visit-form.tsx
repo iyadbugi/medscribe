@@ -16,6 +16,15 @@ const fieldClass =
 const labelClass =
   "text-[11px] uppercase tracking-[0.16em] text-muted-foreground";
 
+const QUICK_COMPLAINTS = [
+  "Sore throat for 3 days",
+  "Annual checkup",
+  "Follow-up · hypertension",
+  "Lower back pain",
+  "Med review",
+  "Persistent cough",
+];
+
 export function VisitForm({ value, onChange, disabled }: Props) {
   const set = <K extends keyof VisitMetadata>(key: K, v: VisitMetadata[K]) =>
     onChange({ ...value, [key]: v });
@@ -63,6 +72,26 @@ export function VisitForm({ value, onChange, disabled }: Props) {
           disabled={disabled}
           className={fieldClass}
         />
+        <div className="mt-2 hidden flex-wrap gap-1.5 sm:flex">
+          {QUICK_COMPLAINTS.map((label) => {
+            const isActive = value.chiefComplaint === label;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => set("chiefComplaint", label)}
+                disabled={disabled}
+                className={`group inline-flex items-center rounded-full border px-3 py-1 text-[12px] font-medium transition-all disabled:opacity-50 ${
+                  isActive
+                    ? "border-[color:var(--sage-deep)] bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
+                    : "border-border/70 bg-background/60 text-muted-foreground hover:border-[color:var(--sage-deep)]/40 hover:bg-[color-mix(in_oklch,var(--mint)_45%,var(--background))] hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { BlurText } from "@/components/motion/blur-text";
+import { Section, Container } from "@/components/section";
 
 const steps = [
   {
@@ -28,16 +29,13 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section
-      id="how"
-      className="bg-cream-blend flex w-full min-h-[100svh] flex-col justify-center py-24"
-    >
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+    <Section id="how" className="bg-cream-blend min-h-[118svh] pb-20 sm:pb-16 md:min-h-[100svh] md:pb-0">
+      <Container>
       <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ margin: "-10% 0px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="flex flex-col gap-6"
         >
@@ -81,7 +79,7 @@ export function HowItWorks() {
               key={s.n}
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={{ margin: "-10% 0px" }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.07 * i }}
               className="flex items-start gap-5"
             >
@@ -100,7 +98,7 @@ export function HowItWorks() {
           ))}
         </div>
       </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }

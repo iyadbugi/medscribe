@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .tile{fill:#1a2230;fill:oklch(0.22 0.04 250)}
+    .bar{fill:#c5dcec;fill:oklch(0.86 0.05 250)}
+    .accent{fill:#ff6b35}
+  </style>
+  <rect class="tile" width="32" height="32" rx="6"/>
+  <rect class="bar"    x="6"    y="12" width="2.4" height="8"  rx="1.2"/>
+  <rect class="bar"    x="10.4" y="9"  width="2.4" height="14" rx="1.2"/>
+  <rect class="accent" x="14.8" y="6"  width="2.4" height="20" rx="1.2"/>
+  <rect class="bar"    x="19.2" y="9"  width="2.4" height="14" rx="1.2"/>
+  <rect class="bar"    x="23.6" y="12" width="2.4" height="8"  rx="1.2"/>
+</svg>

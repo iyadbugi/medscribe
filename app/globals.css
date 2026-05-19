@@ -185,6 +185,15 @@
       var(--background) 100%
     );
   }
+  .bg-mint-blend {
+    background: linear-gradient(
+      to bottom,
+      var(--background) 0%,
+      color-mix(in oklch, var(--mint) 35%, var(--background)) 22%,
+      color-mix(in oklch, var(--mint) 28%, var(--cream)) 60%,
+      var(--background) 100%
+    );
+  }
   .font-display {
     font-family: var(--font-display);
     font-weight: 700;
@@ -213,7 +222,7 @@
 }
 
 html {
-  scroll-padding-top: 88px;
+  scroll-padding-top: 0;
 }
 
 @keyframes marquee {

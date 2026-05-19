@@ -2,6 +2,7 @@
 
 import { useEffect, useReducer, useRef } from "react";
 import dynamic from "next/dynamic";
+import { motion, AnimatePresence } from "motion/react";
 import { useLenis } from "lenis/react";
 import {
   FileDown,
@@ -28,6 +29,8 @@ import { PrivacyFeatures } from "@/components/privacy-features";
 import { HowItWorks } from "@/components/how-it-works";
 import { ClosingCta } from "@/components/closing-cta";
 import Grainient from "@/components/Grainient";
+import { BlurText } from "@/components/motion/blur-text";
+import { Section, Container } from "@/components/section";
 import {
   emptySummary,
   type SummaryResponse,
@@ -141,7 +144,7 @@ function activeStepIndex(stage: Stage): number {
 
 export default function HomePage() {
   const [state, dispatch] = useReducer(reducer, undefined, initialState);
-  const stageSectionRef = useRef<HTMLElement | null>(null);
+  const stageSectionRef = useRef<HTMLDivElement | null>(null);
   const prevStageRef = useRef(state.stage);
   const lenis = useLenis();
 
@@ -247,39 +250,61 @@ export default function HomePage() {
               zoom={0.9}
             />
           </div>
-          <div className="relative z-10 flex flex-1 flex-col justify-center pt-24 pb-12">
+          <div className="relative z-10 flex flex-1 flex-col justify-center pt-20 pb-0 sm:pt-24 sm:pb-24">
           <div className="mx-auto grid w-full max-w-[1400px] gap-y-2 px-5 sm:gap-y-5 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-center lg:gap-x-12 lg:gap-y-0 lg:[grid-template-areas:'upper_anim'_'lower_anim']">
             {/* Headline + lede */}
-            <div className="animate-rise min-w-0 lg:[grid-area:upper] lg:self-end">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-10% 0px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="min-w-0 text-center lg:text-left lg:[grid-area:upper] lg:self-end"
+            >
               <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklch,var(--clay)_38%,transparent)] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-[color:var(--sage-deep)] sm:px-3 sm:py-1.5 sm:text-[11px]">
                 <Stethoscope className="size-3.5" strokeWidth={1.8} />
                 For clinicians · after the visit
               </span>
-              <h1 className="mt-4 font-display text-balance text-[1.95rem] leading-[1.04] tracking-[-0.04em] text-foreground sm:mt-6 sm:text-[3.1rem] sm:leading-[1] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
+              <h1 className="mt-4 font-display text-balance text-[2.4rem] leading-[1.04] tracking-[-0.04em] text-foreground sm:mt-6 sm:text-[3.1rem] sm:leading-[1] md:text-[3.6rem] lg:text-[3.6rem] xl:text-[4.2rem]">
                 Walk out with the note{" "}
                 <span className="font-display-italic text-[color:var(--sage-deep)]">
                   already written.
                 </span>
               </h1>
-              <p className="mt-3 max-w-xl text-pretty text-sm leading-snug text-muted-foreground sm:mt-6 sm:text-lg sm:leading-relaxed">
+              <p className="mt-3 mx-auto max-w-xl text-sm leading-snug text-muted-foreground sm:hidden">
+                Dictate a short summary. MedScribe returns an editable SOAP
+                note
+                <br />
+                and a patient handout — in under a minute.
+              </p>
+              <p className="mt-3 hidden max-w-xl text-pretty text-sm leading-snug text-muted-foreground sm:mt-6 sm:block sm:text-lg sm:leading-relaxed lg:mx-0">
                 Dictate a short post-visit summary. MedScribe returns an
                 editable SOAP note and a plain-English handout, both
                 downloadable as PDF in under a minute.
               </p>
-            </div>
+            </motion.div>
 
             {/* Animation — between text and CTA on mobile, right column on desktop */}
-            <a
+            <motion.a
               href="#start"
-              className="animate-rise relative mx-auto block aspect-[5/4] w-full min-w-0 max-w-[300px] overflow-hidden [animation-delay:120ms] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[560px] lg:-translate-y-2 lg:[grid-area:anim] xl:max-w-[620px]"
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-10% 0px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
+              className="relative -mt-4 mx-auto block aspect-[5/4] w-full min-w-0 max-w-[360px] overflow-hidden sm:-mt-0 sm:max-w-[420px] md:max-w-[480px] lg:max-w-[560px] lg:-translate-y-2 lg:[grid-area:anim] xl:max-w-[620px]"
               aria-label="Watch the explainer and start the demo"
             >
               <ExplainerPlayer />
-            </a>
+            </motion.a>
 
             {/* CTA + stats */}
-            <div className="animate-rise min-w-0 [animation-delay:80ms] lg:[grid-area:lower] lg:self-start lg:pt-8">
-              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-10% 0px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.08 }}
+              className="min-w-0 text-center lg:text-left lg:[grid-area:lower] lg:self-start lg:pt-8"
+            >
+              <div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5 sm:justify-center lg:justify-start">
                 <a
                   href="#start"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[color:var(--sage-deep)] px-7 text-base font-medium text-[color:var(--primary-foreground)] shadow-[0_12px_30px_-14px_color-mix(in_oklch,var(--sage-deep)_60%,transparent)] hover:shadow-[0_16px_40px_-14px_color-mix(in_oklch,var(--sage-deep)_70%,transparent)] transition-all sm:h-14 sm:px-8"
@@ -294,23 +319,22 @@ export default function HomePage() {
                   How it works
                 </a>
               </div>
-              <dl className="mt-5 grid grid-cols-3 gap-4 border-t border-border/60 pt-5 sm:mt-10 sm:gap-8 sm:pt-6">
+              <dl className="mt-3 grid grid-cols-2 gap-6 border-t border-border/60 pt-3 sm:mt-10 sm:gap-8 sm:pt-6">
                 {[
                   { k: "~40s", v: "avg draft time" },
                   { k: "2 docs", v: "SOAP + handout" },
-                  { k: "0", v: "files on disk" },
                 ].map((s) => (
                   <div key={s.v}>
                     <dt className="font-display text-2xl tracking-[-0.03em] text-foreground sm:text-3xl">
                       {s.k}
                     </dt>
-                    <dd className="mt-1.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[11px]">
+                    <dd className="mt-1 text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:text-[11px]">
                       {s.v}
                     </dd>
                   </div>
                 ))}
               </dl>
-            </div>
+            </motion.div>
           </div>
           </div>
           <div className="relative z-10 overflow-hidden border-y border-[color-mix(in_oklch,var(--sage-deep)_10%,transparent)] bg-white">
@@ -327,35 +351,68 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD (full-bleed white band) */}
-      <section id="start" className="w-full bg-card pt-16 sm:pt-20 pb-20 sm:pb-24">
-        <div
-          ref={stageSectionRef}
-          className="mx-auto w-full max-w-6xl px-5 sm:px-8"
-        >
-          <div className="mb-4 text-[11px] uppercase tracking-[0.2em] text-[color:var(--sage-deep)]/80">
-            Try it
-          </div>
+      {/* ACTIVE STAGE — STEP RAIL + FOCAL CARD (full-bleed treated band) */}
+      <Section id="start" className="relative isolate bg-card pt-24 md:pt-24 lg:pt-28">
+        <Container ref={stageSectionRef}>
+          <BlurText
+            as="h2"
+            delay={0.04}
+            className="mb-5 max-w-3xl font-display text-3xl leading-[1.02] tracking-[-0.03em] text-foreground sm:text-4xl md:text-5xl"
+          >
+            Speak it once.{" "}
+            <span className="font-display-italic text-[color:var(--sage-deep)]">Done.</span>
+          </BlurText>
         {/* Stage rail (horizontal) */}
-        <div className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
+        <div className="mb-4 flex flex-wrap items-center gap-x-2 gap-y-2 text-xs">
           {steps.map((s, i) => {
             const isActive = i === stageIndex;
             const isDone = i < stageIndex;
             return (
               <span key={s.key} className="flex items-center gap-2">
-                <span
-                  className={`grid size-5 place-items-center rounded-full text-[10px] font-medium ${
-                    isDone
-                      ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
-                      : isActive
-                      ? "bg-[color:var(--clay)] text-[color:var(--primary-foreground)]"
-                      : "bg-secondary text-muted-foreground"
-                  }`}
-                >
-                  {isDone ? <Check className="size-3" strokeWidth={2.4} /> : i + 1}
+                <span className="relative grid place-items-center">
+                  {isActive && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-0 -m-1 animate-pulse-ring rounded-full bg-[color:var(--clay)]/30"
+                    />
+                  )}
+                  <span
+                    className={`relative grid size-5 place-items-center rounded-full text-[10px] font-medium transition-colors duration-300 ${
+                      isDone
+                        ? "bg-[color:var(--sage-deep)] text-[color:var(--primary-foreground)]"
+                        : isActive
+                        ? "bg-[color:var(--clay)] text-[color:var(--primary-foreground)]"
+                        : "bg-secondary text-muted-foreground"
+                    }`}
+                  >
+                    <AnimatePresence mode="popLayout" initial={false}>
+                      {isDone ? (
+                        <motion.span
+                          key="check"
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.5, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                          className="flex"
+                        >
+                          <Check className="size-3" strokeWidth={2.4} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="num"
+                          initial={{ scale: 0.5, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.5, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          {i + 1}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </span>
                 </span>
                 <span
-                  className={`uppercase tracking-[0.14em] ${
+                  className={`uppercase tracking-[0.14em] transition-colors duration-300 ${
                     isActive
                       ? "text-foreground"
                       : isDone
@@ -366,7 +423,15 @@ export default function HomePage() {
                   {s.title}
                 </span>
                 {i < steps.length - 1 && (
-                  <span className="mx-1 h-px w-6 bg-border sm:w-10" />
+                  <span className="relative mx-1 h-px w-6 overflow-hidden bg-border sm:w-10">
+                    <motion.span
+                      aria-hidden
+                      className="absolute inset-y-0 left-0 bg-[color:var(--sage-deep)]"
+                      initial={false}
+                      animate={{ width: i < stageIndex ? "100%" : "0%" }}
+                      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  </span>
                 )}
               </span>
             );
@@ -376,37 +441,57 @@ export default function HomePage() {
         {/* IDLE / ERROR — VISIT FORM + RECORDER */}
         {(state.stage === "idle" || state.stage === "error") && (
           <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
-            <section className="relative overflow-hidden rounded-[24px] bg-card p-6 ring-1 ring-border/70 sm:p-7">
+            <motion.section
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-10% 0px", once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+              className="relative overflow-hidden rounded-[24px] bg-card p-5 ring-1 ring-border/70 shadow-[0_30px_60px_-40px_color-mix(in_oklch,var(--sage-deep)_45%,transparent)] sm:p-6"
+            >
               <div className="absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
                 01 · Visit details
               </div>
-              <h2 className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em]">
+              <BlurText
+                as="h2"
+                delay={0.05}
+                className="mt-1 font-display text-xl leading-tight tracking-[-0.03em] sm:text-2xl"
+              >
                 Who and <span className="text-[color:var(--sage-deep)]">when.</span>
-              </h2>
-              <p className="mt-1.5 text-sm text-muted-foreground">
+              </BlurText>
+              <p className="mt-1 text-sm text-muted-foreground">
                 Optional. The model uses these to address the patient by name.
               </p>
-              <div className="mt-6">
+              <div className="mt-4">
                 <VisitForm
                   value={state.metadata}
                   onChange={(metadata) => dispatch({ type: "set_metadata", metadata })}
                   disabled={inputsDisabled}
                 />
               </div>
-            </section>
+            </motion.section>
 
-            <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_45%,var(--card))] to-[color:var(--card)] p-6 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] sm:p-7">
+            <motion.section
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ margin: "-10% 0px", once: true }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="relative flex flex-col overflow-hidden rounded-[24px] bg-gradient-to-br from-[color-mix(in_oklch,var(--mint)_55%,var(--card))] via-[color-mix(in_oklch,var(--mint)_20%,var(--card))] to-[color:var(--card)] p-5 ring-1 ring-[color-mix(in_oklch,var(--sage-deep)_15%,transparent)] shadow-[0_40px_80px_-40px_color-mix(in_oklch,var(--sage-deep)_55%,transparent)] sm:p-6"
+            >
               <div className="absolute right-4 top-4 text-[10px] uppercase tracking-[0.18em] text-[color:var(--sage-deep)]/80">
                 02 · Dictation
               </div>
-              <h2 className="mt-2 font-display text-2xl leading-tight tracking-[-0.03em]">
+              <BlurText
+                as="h2"
+                delay={0.15}
+                className="mt-1 font-display text-xl leading-tight tracking-[-0.03em] sm:text-2xl"
+              >
                 Speak the visit. <span className="text-[color:var(--sage-deep)]">Loosely.</span>
-              </h2>
-              <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+              </BlurText>
+              <p className="mt-1 max-w-sm text-sm text-muted-foreground">
                 Subjective findings, exam, assessment, plan. Don&rsquo;t worry
                 about structure — the model will sort it.
               </p>
-              <div className="mt-6">
+              <div className="mt-4 flex flex-1 flex-col">
                 <Recorder
                   onComplete={(audio) => runPipeline(audio, state.metadata)}
                   disabled={inputsDisabled}
@@ -424,7 +509,7 @@ export default function HomePage() {
                   )}
                 </div>
               )}
-            </section>
+            </motion.section>
           </div>
         )}
 
@@ -634,8 +719,8 @@ export default function HomePage() {
             </aside>
           </div>
         )}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* HOW IT WORKS — only on idle */}
       {(state.stage === "idle" || state.stage === "error") && <HowItWorks />}

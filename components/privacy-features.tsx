@@ -4,6 +4,7 @@ import { useRef, type ReactNode } from "react";
 import { motion } from "motion/react";
 import { Server, Cpu, MicOff, FolderLock } from "lucide-react";
 import { BlurText } from "@/components/motion/blur-text";
+import { Section, Container } from "@/components/section";
 
 function SpotlightPillar({
   className,
@@ -30,7 +31,7 @@ function SpotlightPillar({
       onMouseMove={handleMouseMove}
       initial={{ opacity: 0, y: 18, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
+      viewport={{ margin: "-10% 0px" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
       className={`group ${className}`}
     >
@@ -76,10 +77,7 @@ const features = [
 
 export function PrivacyFeatures() {
   return (
-    <section
-      id="privacy"
-      className="relative flex w-full min-h-[100svh] flex-col justify-center bg-card py-24"
-    >
+    <Section id="privacy" className="relative bg-card">
       {/* Dashed grid wash, fading in from top-right */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
@@ -92,19 +90,19 @@ export function PrivacyFeatures() {
           maskImage: `
             repeating-linear-gradient(to right, black 0 3px, transparent 3px 8px),
             repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 8px),
-            radial-gradient(ellipse 110% 90% at 100% 100%, #000 15%, transparent 85%)
+            radial-gradient(ellipse 140% 120% at 100% 100%, #000 35%, transparent 100%)
           `,
           WebkitMaskImage: `
             repeating-linear-gradient(to right, black 0 3px, transparent 3px 8px),
             repeating-linear-gradient(to bottom, black 0 3px, transparent 3px 8px),
-            radial-gradient(ellipse 110% 90% at 100% 100%, #000 15%, transparent 85%)
+            radial-gradient(ellipse 140% 120% at 100% 100%, #000 35%, transparent 100%)
           `,
           maskComposite: "intersect",
           WebkitMaskComposite: "source-in",
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-5 sm:px-8">
+      <Container className="relative z-10">
         {/* Header */}
         <div className="mb-8 md:mb-10">
           <BlurText
@@ -182,7 +180,7 @@ export function PrivacyFeatures() {
             );
           })}
         </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
