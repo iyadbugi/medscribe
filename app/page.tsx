@@ -319,8 +319,9 @@ export default function HomePage() {
                   How it works
                 </a>
               </div>
-              <dl className="mt-3 grid grid-cols-2 gap-6 border-t border-border/60 pt-3 sm:mt-10 sm:gap-8 sm:pt-6">
+              <dl className="mt-3 grid grid-cols-3 gap-4 border-t border-border/60 pt-3 sm:mt-10 sm:gap-8 sm:pt-6">
                 {[
+                  { k: "3 min", v: "your dictation" },
                   { k: "~40s", v: "avg draft time" },
                   { k: "2 docs", v: "SOAP + handout" },
                 ].map((s) => (
