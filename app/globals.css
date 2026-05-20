@@ -90,8 +90,8 @@
   --ring: oklch(0.55 0.08 250);
 
   /* Brand palette */
-  --mint: oklch(0.86 0.05 250);
-  --mint-foreground: oklch(0.26 0.06 250);
+  --mint: oklch(0.85 0.10 245);
+  --mint-foreground: oklch(0.26 0.06 245);
   --cream: oklch(0.97 0.012 85);
   --sage: oklch(0.55 0.05 250);
   --sage-deep: oklch(0.22 0.04 250);

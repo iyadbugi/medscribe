@@ -159,12 +159,12 @@ export function PrivacyFeatures() {
                       className="absolute inset-0 rounded-full"
                       style={{
                         background:
-                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, #3b82f6 55%, transparent) 0%, transparent 70%)",
+                          "radial-gradient(circle at 50% 50%, color-mix(in oklch, #3b82f6 28%, transparent) 0%, transparent 70%)",
                       }}
                     />
                     <Icon
                       className="relative size-8 text-[#1e40af] sm:size-9"
-                      strokeWidth={0.8}
+                      strokeWidth={1.5}
                     />
                   </div>
                 </div>

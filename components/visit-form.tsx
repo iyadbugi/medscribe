@@ -54,7 +54,7 @@ export function VisitForm({ value, onChange, disabled }: Props) {
           value={value.visitDate}
           onChange={(e) => set("visitDate", e.target.value)}
           disabled={disabled}
-          className={fieldClass}
+          className={`${fieldClass} block w-full appearance-none`}
         />
       </div>
       <div className="flex flex-col gap-1.5 sm:col-span-2">
