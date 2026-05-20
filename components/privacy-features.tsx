@@ -163,7 +163,7 @@ export function PrivacyFeatures() {
                       }}
                     />
                     <Icon
-                      className="relative size-8 text-[color:var(--sage-deep)] sm:size-9"
+                      className="relative size-8 text-[#1e40af] sm:size-9"
                       strokeWidth={0.8}
                     />
                   </div>
