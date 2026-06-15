@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import { BlurText } from "@/components/motion/blur-text";
-import { Section, Container } from "@/components/section";
+import { Section, Container } from "@/components/layout/section";
 
 const steps = [
   {

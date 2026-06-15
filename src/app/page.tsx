@@ -20,17 +20,17 @@ import {
   FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Recorder } from "@/components/recorder";
-import { VisitForm } from "@/components/visit-form";
-import { SummaryReview } from "@/components/summary-review";
-import { SoapDocument } from "@/components/pdf/soap-document";
-import { HandoutDocument } from "@/components/pdf/handout-document";
-import { PrivacyFeatures } from "@/components/privacy-features";
-import { HowItWorks } from "@/components/how-it-works";
-import { ClosingCta } from "@/components/closing-cta";
-import Grainient from "@/components/Grainient";
+import { Recorder } from "@/components/scribe/recorder";
+import { VisitForm } from "@/components/scribe/visit-form";
+import { SummaryReview } from "@/components/scribe/summary-review";
+import { SoapDocument } from "@/components/scribe/pdf/soap-document";
+import { HandoutDocument } from "@/components/scribe/pdf/handout-document";
+import { PrivacyFeatures } from "@/components/marketing/privacy-features";
+import { HowItWorks } from "@/components/marketing/how-it-works";
+import { ClosingCta } from "@/components/marketing/closing-cta";
+import Grainient from "@/components/effects/grainient";
 import { BlurText } from "@/components/motion/blur-text";
-import { Section, Container } from "@/components/section";
+import { Section, Container } from "@/components/layout/section";
 import {
   emptySummary,
   type SummaryResponse,
@@ -43,7 +43,7 @@ const PDFDownloadLink = dynamic(
 );
 
 const ExplainerPlayer = dynamic(
-  () => import("@/components/explainer-player").then((m) => m.ExplainerPlayer),
+  () => import("@/components/marketing/explainer-player").then((m) => m.ExplainerPlayer),
   { ssr: false, loading: () => <div className="aspect-[3/2] w-full rounded-[28px] bg-[color:var(--secondary)]" /> }
 );
 

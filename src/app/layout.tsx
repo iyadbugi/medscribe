@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces, Bricolage_Grotesque } from "next/font/google";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
-import GlassSurface from "@/components/GlassSurface";
+import GlassSurface from "@/components/effects/glass-surface";
 import "./globals.css";
 
 const geistSans = Geist({

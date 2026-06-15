@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useId } from 'react';
-import './GlassSurface.css';
+import './glass-surface.css';
 
 const GlassSurface = ({
   children,
